@@ -1,0 +1,44 @@
+Story technique Authentification :
+
+En tant que
+    Utilisateur
+Je veux
+    Créer un compte
+Afin de
+    D'accéder aux services de PacBad
+
+Critères d'acceptance :
+Mon compte est créé
+Je peux me connecter
+J'ai un rôle Joueur par défaut
+
+
+###############################
+
+Story Création Tournoi :
+
+En tant que
+    Organisateur
+Je veux
+    Déclarer un tournoi pour le club auquel j'appartiens
+Afin de
+    Donner la possibilité aux joueurs de s'inscrire
+
+Critères d'acceptance :
+Le tournoi que je viens de créer est visible dans la liste des tournois ouverts
+Je peux consulter la liste des tableaux ouverts
+
+###############################
+
+Story Inscription Joueur :
+
+En tant que
+    Joueur
+Je veux
+    M'inscrire à un tournoi
+Afin de
+    Participer à des compétitions
+
+Critères d'acceptance :
+Je peux consulter mes inscriptions en cours et voir ma nouvelle inscription
+L'organisateur du tournoi voit mon inscription
