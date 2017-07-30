@@ -6,28 +6,28 @@ pipeline {
     stages {
 //        stage('Checkout') {
 //            steps {
-//                git credentialsId: 'c1675cca-e456-4bf3-b85c-41538b827c90', url: '/volume1/data/sources/badminton/test.git'
+//                git credentialsId: 'c1675cca-e456-4bf3-b85c-41538b827c90', url: '/volume1/data/sources/badminton/pacbad.git'
 //            }
 //        }
         stage('Préparation') {
             steps {
-                sh 'npm install'
+                sh 'cd web && npm install'
             }
         }
 //        stage('Test') {
 //            steps {
-//                sh 'npm run-script test'
+//                sh 'cd web && npm run-script test'
 //            }
 //        }
         stage('Construction') {
             steps {
-                sh 'npm run-script build'
+                sh 'cd web && npm run-script build'
             }
         }
         stage('Déploiement') {
             steps {
-                sh 'rm -rf /volume1/app/web/test/*'
-                sh 'cp -r dist/* /volume1/app/web/test/'
+                sh 'rm -rf /volume1/app/web/pacbad/*'
+                sh 'cp -r web/dist/* /volume1/app/web/pacbad/'
             }
         }
     }
