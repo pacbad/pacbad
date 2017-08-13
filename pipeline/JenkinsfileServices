@@ -1,0 +1,34 @@
+#!groovy
+
+pipeline {
+    agent any
+
+    stages {
+//        stage('Checkout') {
+//            steps {
+//                git credentialsId: 'c1675cca-e456-4bf3-b85c-41538b827c90', url: '/volume1/data/sources/badminton/pacbad.git'
+//            }
+//        }
+        stage('Construction') {
+            steps {
+                sh 'cd services && mvn clean package'
+            }
+        }
+        stage('Rapports') {
+            steps {
+                junit allowEmptyResults: true, testResults: 'services/target/surefire-reports/*.xml'
+            }
+        }
+        stage('Archivage') {
+            steps {
+                archiveArtifacts 'target/*.war'
+            }
+        }
+        stage('Déploiement') {
+            steps {
+                sh 'rm -rf /volume1/app/web/pacbad/*'
+                sh 'cp -r web/dist/* /volume1/app/web/pacbad/'
+            }
+        }
+    }
+}
