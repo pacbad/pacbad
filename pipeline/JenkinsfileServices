@@ -21,14 +21,14 @@ pipeline {
         }
         stage('Archivage') {
             steps {
-                archiveArtifacts 'target/*.war'
+                archiveArtifacts 'services/target/*.war'
             }
         }
-        stage('Déploiement') {
-            steps {
-                sh 'rm -rf /volume1/app/web/pacbad/*'
-                sh 'cp -r web/dist/* /volume1/app/web/pacbad/'
-            }
-        }
+//        stage('Déploiement') {
+//            steps {
+//                sh 'rm -rf /volume1/app/web/pacbad/*'
+//                sh 'cp -r web/dist/* /volume1/app/web/pacbad/'
+//            }
+//        }
     }
 }
