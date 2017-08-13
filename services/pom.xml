@@ -10,6 +10,25 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+
+		<!-- Les propriétés suivantes seront mises dans le fichier build-info.properties 
+			dans le jar (avec le plugin de build ci-dessus). -->
+		<!-- Ces propriétés sont connues quand le build est fait par la PIC (Jenkins). -->
+		<build.number>${env.BUILD_NUMBER}</build.number>
+		<build.id>${env.BUILD_ID}</build.id>
+		<build.url>${env.BUILD_URL}</build.url>
+		<build.jobName>${env.JOB_NAME}</build.jobName>
+		<build.tag>${env.BUILD_TAG}</build.tag>
+		<build.svnRevision>${env.SVN_REVISION}</build.svnRevision>
+		<build.svnUrl>${env.SVN_URL}</build.svnUrl>
+
+		<!-- Pour les propriétés suivantes, ce qui importe c'est les propriétés 
+			du module courant qui contient les infos globales sur le build. -->
+		<build.projectGroupId>${project.groupId}</build.projectGroupId>
+		<build.projectArtifactId>${project.artifactId}</build.projectArtifactId>
+		<build.projectVersion>${project.version}</build.projectVersion>
+		<build.timestamp>${maven.build.timestamp}</build.timestamp>
+    <maven.build.timestamp.format>yyyyMMdd.HHmmss</maven.build.timestamp.format>
 	</properties>
 
 	<dependencies>
@@ -96,6 +115,22 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0.0</version>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>write-project-properties</goal>
+						</goals>
+						<configuration>
+							<outputFile>${project.build.outputDirectory}/build-info.properties</outputFile>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
