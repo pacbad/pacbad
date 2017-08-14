@@ -11,7 +11,7 @@ public class User implements SimpleEntity {
 
 	@Column(name = "id")
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "login")
@@ -20,11 +20,12 @@ public class User implements SimpleEntity {
 	@Column(name = "hash")
 	private String hash;
 
+	@Override
 	public Long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 
@@ -32,7 +33,7 @@ public class User implements SimpleEntity {
 		return login;
 	}
 
-	public void setLogin(String login) {
+	public void setLogin(final String login) {
 		this.login = login;
 	}
 
@@ -40,7 +41,7 @@ public class User implements SimpleEntity {
 		return hash;
 	}
 
-	public void setHash(String hash) {
+	public void setHash(final String hash) {
 		this.hash = hash;
 	}
 

@@ -1,6 +1,9 @@
 package fr.pacbad.services;
 
+import java.io.UnsupportedEncodingException;
 import java.security.Key;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -8,22 +11,24 @@ import javax.inject.Inject;
 
 import fr.pacbad.auth.KeyGenerator;
 import fr.pacbad.dao.SimpleDao;
+import fr.pacbad.dao.UserDao;
 import fr.pacbad.entities.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 public class UserService extends SimpleService<User> {
 
+	private static final String SALT = "blablablatextquisertdesaliere";
+
 	@Inject
 	private KeyGenerator keyGenerator;
 
 	@Override
 	protected SimpleDao<User> createDao() {
-		return new SimpleDao<User>() {
-		};
+		return new UserDao();
 	}
 
-	public void authenticate(String login, String password) throws Exception {
+	public void authenticate(final String login, final String password) throws Exception {
 		final User u = getByLogin(login);
 		final String hash = hash(password);
 		if (u != null && hash.equals(u.getHash())) {
@@ -35,13 +40,25 @@ public class UserService extends SimpleService<User> {
 	public User getByLogin(final String login) {
 		return getDao().getByColumn("login", login);
 	}
-	
+
 	public String hash(final String password) {
-		// TODO hash
-		return password;
+		final String hash;
+		try {
+			final MessageDigest md = MessageDigest.getInstance("SHA-512");
+			md.update(SALT.getBytes("UTF-8"));
+			final byte[] bytes = md.digest(password.getBytes("UTF-8"));
+			final StringBuilder sb = new StringBuilder();
+			for (final byte b : bytes) {
+				sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+			}
+			hash = sb.toString();
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+			throw new RuntimeException("Impossible de créer un hash pour le mot de passe", e);
+		}
+		return hash;
 	}
 
-	public String issueToken(String login) {
+	public String issueToken(final String login) {
 		final Key key = keyGenerator.getKey();
 		final Calendar cal = Calendar.getInstance();
 		// Le jeton sera valide pendant une heure

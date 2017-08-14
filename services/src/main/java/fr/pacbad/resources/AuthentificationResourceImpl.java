@@ -25,7 +25,7 @@ public class AuthentificationResourceImpl {
 	@POST
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response authenticateUser(@FormParam("login") String login, @FormParam("password") String password) {
+	public Response login(@FormParam("login") final String login, @FormParam("password") final String password) {
 		try {
 			// Authenticate the user using the credentials provided
 			userService.authenticate(login, password);
@@ -36,9 +36,19 @@ public class AuthentificationResourceImpl {
 			// Return the token on the response
 			return Response.ok().header(HttpHeaders.AUTHORIZATION, "Bearer " + token).build();
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
+	}
+
+	@POST
+	@AuthNeeded
+	@Path("/logout")
+	public Response logout() {
+		// Ce service ne fait rien car le token restera valide encore un certain temps
+		// Par contre, côté client il faudra supprimer le token du session storage du
+		// navigateur
+		return Response.noContent().build();
 	}
 
 	@GET

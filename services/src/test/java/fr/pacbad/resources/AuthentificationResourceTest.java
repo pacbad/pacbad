@@ -5,6 +5,7 @@ import javax.ws.rs.core.Response;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -28,8 +29,8 @@ public class AuthentificationResourceTest extends PacbadTest {
 
 	@Test
 	public void testLoginOk() {
-		Mockito.when(userService.issueToken(Mockito.anyString())).thenReturn("abc");
-		final Response response = authentificationResource.authenticateUser("benjamin", "test");
+		Mockito.when(userService.issueToken(ArgumentMatchers.anyString())).thenReturn("abc");
+		final Response response = authentificationResource.login("benjamin", "test");
 
 		Assert.assertEquals(200, response.getStatus());
 		Assert.assertNotNull(response.getHeaderString("Authorization"));
@@ -39,12 +40,13 @@ public class AuthentificationResourceTest extends PacbadTest {
 	@Test
 	public void testLoginFail() {
 		try {
-			Mockito.doThrow(Exception.class).when(userService).authenticate(Mockito.anyString(), Mockito.anyString());
+			Mockito.doThrow(Exception.class).when(userService).authenticate(ArgumentMatchers.anyString(),
+					ArgumentMatchers.anyString());
 		} catch (final Exception e) {
 			Assert.fail("Impossible d'initialiser le bouchon");
 		}
-		
-		final Response response = authentificationResource.authenticateUser("benjamin", "test");
+
+		final Response response = authentificationResource.login("benjamin", "test");
 
 		Assert.assertEquals(401, response.getStatus());
 	}

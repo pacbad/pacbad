@@ -23,12 +23,14 @@ import io.jsonwebtoken.Jwts;
 @AuthNeeded
 public class AuthFilter implements ContainerRequestFilter {
 
-	private static final ThreadLocal<Jws<Claims>> THREAD_LOCAL_CLAIMS = new ThreadLocal<Jws<Claims>>();
+	private static final ThreadLocal<Jws<Claims>> THREAD_LOCAL_CLAIMS = new ThreadLocal<>();
 
 	@Inject
 	private KeyGenerator keyGenerator;
 
-	public void filter(ContainerRequestContext request) {
+	@Override
+	public void filter(final ContainerRequestContext request) {
+		System.out.println("Start AuthFilter");
 
 		// Get the HTTP Authorization header from the request
 		final String authorizationHeader = request.getHeaderString(HttpHeaders.AUTHORIZATION);
@@ -46,7 +48,7 @@ public class AuthFilter implements ContainerRequestFilter {
 			final Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
 			THREAD_LOCAL_CLAIMS.set(claims);
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new WebApplicationException(e, Response.Status.UNAUTHORIZED);
 		}
 	}

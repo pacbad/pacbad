@@ -17,11 +17,11 @@ import fr.pacbad.filter.TransactionFilter;
 public abstract class AbstractServiceTest<T extends SimpleService<?>> extends PacbadTest {
 
 	protected T service;
-	
+
 	protected abstract T createService();
-	
+
 	private TransactionFilter transactionFilter;
-	
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws ServletException {
 		new TransactionFilter().init(null);

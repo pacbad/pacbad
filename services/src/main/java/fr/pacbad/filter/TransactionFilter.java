@@ -1,7 +1,6 @@
 package fr.pacbad.filter;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 import javax.annotation.Priority;
 import javax.persistence.EntityManager;
@@ -19,14 +18,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Priorities;
 
 import fr.pacbad.Application;
+import fr.pacbad.logger.PacbadLogger;
 
 @Priority(Priorities.USER + 20)
 @WebFilter(urlPatterns = { "/*" })
 public class TransactionFilter implements Filter {
 
-	private static final Logger LOGGER = Logger.getLogger(TransactionFilter.class.getSimpleName());
+	private static final PacbadLogger LOGGER = PacbadLogger.getLogger(TransactionFilter.class);
 
-	private static final ThreadLocal<EntityManager> THREAD_LOCAL_ENTITY_MANAGER = new ThreadLocal<EntityManager>();
+	private static final ThreadLocal<EntityManager> THREAD_LOCAL_ENTITY_MANAGER = new ThreadLocal<>();
 
 	public static EntityManagerFactory emf;
 
@@ -41,9 +41,9 @@ public class TransactionFilter implements Filter {
 		// HttpMethod.DELETE.equals(method);
 	}
 
-	private boolean shouldRollbackTransaction(ServletResponse response) {
+	private boolean shouldRollbackTransaction(final ServletResponse response) {
 		if (response instanceof HttpServletResponse) {
-			int status = ((HttpServletResponse) response).getStatus();
+			final int status = ((HttpServletResponse) response).getStatus();
 			return status >= 400;
 		} else {
 			LOGGER.warning("Ce n'est pas une requête HTTP : " + response.getClass());
@@ -52,15 +52,15 @@ public class TransactionFilter implements Filter {
 	}
 
 	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
+	public void init(final FilterConfig filterConfig) throws ServletException {
 		LOGGER.info("Démarrage de l'application en mode " + Application.getEnvironnement());
 		emf = Persistence.createEntityManagerFactory("pacbad-persistence-" + Application.getEnvironnement());
 	}
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
 			throws IOException, ServletException {
-
+		// System.out.println("Start TransactionFilter");
 		initEntityManager();
 
 		beforeRequest(request);
@@ -71,6 +71,7 @@ public class TransactionFilter implements Filter {
 
 			afterRequest(response);
 		}
+		// System.out.println("End TransactionFilter");
 
 	}
 
@@ -79,7 +80,7 @@ public class TransactionFilter implements Filter {
 		THREAD_LOCAL_ENTITY_MANAGER.set(entityManager);
 	}
 
-	public EntityTransaction beforeRequest(ServletRequest request) {
+	public EntityTransaction beforeRequest(final ServletRequest request) {
 		// Démarrage d'une transaction
 		EntityTransaction transaction = null;
 		if (shouldStartTransaction(request)) {
@@ -89,7 +90,7 @@ public class TransactionFilter implements Filter {
 		return transaction;
 	}
 
-	public void afterRequest(ServletResponse response) {
+	public void afterRequest(final ServletResponse response) {
 		// Fin de la transaction
 		final EntityTransaction transaction = getEntityManager().getTransaction();
 		if (transaction != null && transaction.isActive()) {

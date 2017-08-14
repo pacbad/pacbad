@@ -7,23 +7,23 @@ import fr.pacbad.entities.SimpleEntity;
 
 public abstract class SimpleService<T extends SimpleEntity> {
 
-	private SimpleDao<T> dao = createDao();
+	private final SimpleDao<T> dao = createDao();
 
 	protected abstract SimpleDao<T> createDao();
-	
+
 	protected SimpleDao<T> getDao() {
 		return dao;
 	}
 
-	public T create(T e) {
+	public T create(final T e) {
 		return getDao().create(e);
 	}
 
-	public T update(T e) {
+	public T update(final T e) {
 		return getDao().update(e);
 	}
 
-	public T createOrUpdate(T e) {
+	public T createOrUpdate(final T e) {
 		if (e.getId() == null) {
 			return create(e);
 		} else {
@@ -31,7 +31,7 @@ public abstract class SimpleService<T extends SimpleEntity> {
 		}
 	}
 
-	public void delete(T e) {
+	public void delete(final T e) {
 		getDao().delete(e);
 	}
 

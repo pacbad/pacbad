@@ -10,6 +10,10 @@ import org.glassfish.jersey.server.ResourceConfig;
 @ApplicationPath("/")
 public class Application extends ResourceConfig {
 
+	public static final String ENVIRONNEMENT_DEV = "dev";
+	public static final String ENVIRONNEMENT_TEST = "test";
+	public static final String ENVIRONNEMENT_PROD = "prod";
+
 	public static String environnement = System.getProperty("pacbad.environnement");
 
 	@Inject

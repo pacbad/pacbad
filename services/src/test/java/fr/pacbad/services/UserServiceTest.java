@@ -1,5 +1,6 @@
 package fr.pacbad.services;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class UserServiceTest extends AbstractServiceTest<UserService> {
@@ -13,5 +14,11 @@ public class UserServiceTest extends AbstractServiceTest<UserService> {
 	public void testAuthenticate() throws Exception {
 		service.authenticate("test", "test");
 	}
-	
+
+	@Test
+	public void testHash() {
+		final String hash = service.hash("test");
+		Assert.assertNotEquals("test", hash);
+	}
+
 }

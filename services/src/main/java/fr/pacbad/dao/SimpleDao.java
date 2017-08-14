@@ -14,18 +14,18 @@ public abstract class SimpleDao<T extends SimpleEntity> {
 	protected EntityManager getEntityManager() {
 		return TransactionFilter.getEntityManager();
 	}
-	
-	public T create(T e) {
+
+	public T create(final T e) {
 		getEntityManager().persist(e);
 		return e;
 	}
 
-	public T update(T e) {
+	public T update(final T e) {
 		getEntityManager().merge(e);
 		return e;
 	}
 
-	public void delete(T e) {
+	public void delete(final T e) {
 		getEntityManager().remove(e);
 	}
 
@@ -34,25 +34,25 @@ public abstract class SimpleDao<T extends SimpleEntity> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public T getByColumn(String columnName, Object value) {
+	public T getByColumn(final String columnName, final Object value) {
 		try {
-			return (T) getEntityManager()
-					.createQuery(
-							"Select e from " + getEntityType().getSimpleName() + " e where e." + columnName + " = :value")
+			return (T) getEntityManager().createQuery(
+					"Select e from " + getEntityType().getSimpleName() + " e where e." + columnName + " = :value")
 					.setParameter("value", value).getSingleResult();
-		} catch (NoResultException e) {
+		} catch (final NoResultException e) {
 			return null;
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<T> getAll() {
-		return getEntityManager().createQuery("Select e from " + getEntityType().getSimpleName() + " e").getResultList();
+		return getEntityManager().createQuery("Select e from " + getEntityType().getSimpleName() + " e")
+				.getResultList();
 	}
 
 	protected Class<T> getEntityType() {
 		@SuppressWarnings("unchecked")
-		Class<T> persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
+		final Class<T> persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
 				.getActualTypeArguments()[0];
 		return persistentClass;
 	}

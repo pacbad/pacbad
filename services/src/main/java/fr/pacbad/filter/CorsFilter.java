@@ -16,45 +16,26 @@ import javax.ws.rs.Priorities;
 
 import fr.pacbad.logger.PacbadLogger;
 
-@Priority(Priorities.USER + 10)
+@Priority(Priorities.HEADER_DECORATOR)
 @WebFilter(urlPatterns = { "/*" })
-public class LogFilter implements Filter {
+public class CorsFilter implements Filter {
 
-	private static final PacbadLogger LOGGER = PacbadLogger.getLogger(LogFilter.class);
+	private static final PacbadLogger LOGGER = PacbadLogger.getLogger(CorsFilter.class);
 
 	@Override
 	public void init(final FilterConfig filterConfig) throws ServletException {
-		LOGGER.info("Initialisation du Logger");
+		LOGGER.info("Initialisation du CORS Filter");
 	}
 
 	@Override
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
 			throws IOException, ServletException {
 		if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
-			final HttpServletRequest httpRequest = (HttpServletRequest) request;
 			final HttpServletResponse httpResponse = (HttpServletResponse) response;
-
-			final long startTime = System.currentTimeMillis();
-
 			try {
 				chain.doFilter(request, response);
-
 			} finally {
-
-				final long endTime = System.currentTimeMillis();
-				final long duration = endTime - startTime;
-				String message = "(";
-				if (AuthFilter.getUserLogin() != null) {
-					message += AuthFilter.getUserLogin();
-				} else {
-					message += "???";
-				}
-				message += ") ";
-				message += httpRequest.getMethod() + ' ';
-				message += httpRequest.getRequestURI() + " --> ";
-				message += httpResponse.getStatus();
-				message += " (" + duration + "ms)";
-				LOGGER.info(message);
+				httpResponse.setHeader("Accept", "*");
 			}
 		} else {
 			chain.doFilter(request, response);
