@@ -31,15 +31,20 @@ public class CorsFilter implements Filter {
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
 			throws IOException, ServletException {
 		if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
+			final HttpServletRequest httpRequest = (HttpServletRequest) request;
+
 			final HttpServletResponse httpResponse = (HttpServletResponse) response;
-			try {
-				chain.doFilter(request, response);
-			} finally {
-				httpResponse.setHeader("Accept", "*");
+			httpResponse.addHeader("Access-Control-Allow-Origin", "*");
+			httpResponse.addHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
+			httpResponse.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+			// Just ACCEPT and REPLY OK if OPTIONS
+			if (httpRequest.getMethod().equals("OPTIONS")) {
+				httpResponse.setStatus(HttpServletResponse.SC_OK);
+				return;
 			}
-		} else {
-			chain.doFilter(request, response);
 		}
+		chain.doFilter(request, response);
 
 	}
 
