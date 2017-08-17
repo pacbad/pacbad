@@ -79,7 +79,8 @@
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<version>2.4.0</version>
-			<scope>test</scope>
+<!-- 			Dépendance utilisée pour le moment pour le déploiement -->
+<!-- 			<scope>test</scope> -->
 		</dependency>
 
 		<!-- Tests -->
