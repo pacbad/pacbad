@@ -34,6 +34,7 @@ public class AuthentificationResourceImpl {
 			final String token = userService.issueToken(login);
 
 			// Return the token on the response
+			// TODO Renvoyer le userinfo dans le corps de la réponse
 			return Response.ok().header(HttpHeaders.AUTHORIZATION, "Bearer " + token).build();
 
 		} catch (final Exception e) {
