@@ -24,11 +24,11 @@ pipeline {
                 archiveArtifacts 'services/target/*.war'
             }
         }
-//        stage('Déploiement') {
-//            steps {
-//                sh 'rm -rf /volume1/app/web/pacbad/*'
-//                sh 'cp -r web/dist/* /volume1/app/web/pacbad/'
-//            }
-//        }
+        stage('Déploiement') {
+            steps {
+                sh 'rm -rf /volume1/app/apache-tomcat-8.5.16/webapps/pacbad-services*'
+                sh 'cp services/target/*.war /volume1/app/apache-tomcat-8.5.16/webapps/'
+            }
+        }
     }
 }
