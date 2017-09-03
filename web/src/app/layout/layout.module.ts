@@ -6,6 +6,7 @@ import {ServicesModule} from '../services/services.module'
 
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { LayoutCommunComponent } from './layout-commun/layout-commun.component';
 
 @NgModule({
   imports: [
@@ -13,7 +14,7 @@ import { FooterComponent } from './footer/footer.component';
     RouterModule,
     ServicesModule
   ],
-  declarations: [HeaderComponent, FooterComponent],
+  declarations: [HeaderComponent, FooterComponent, LayoutCommunComponent],
   exports: [HeaderComponent, FooterComponent]
 })
 export class LayoutModule { }
