@@ -37,7 +37,7 @@ public class AuthentificationResourceTest extends PacbadTest {
 		final Claims claims = new DefaultClaims();
 		Mockito.when(userService.getClaims("abc")).thenReturn(new DefaultJws<Claims>(null, claims, null));
 		final UserLogin userLogin = new UserLogin();
-		userLogin.login = "benjamin";
+		userLogin.mail = "benjamin";
 		userLogin.password = "test";
 		final Response response = authentificationResource.login(userLogin);
 
@@ -57,7 +57,7 @@ public class AuthentificationResourceTest extends PacbadTest {
 		}
 
 		final UserLogin userLogin = new UserLogin();
-		userLogin.login = "benjamin";
+		userLogin.mail = "benjamin";
 		userLogin.password = "test";
 		final Response response = authentificationResource.login(userLogin);
 

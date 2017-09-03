@@ -24,12 +24,12 @@ const appRoutes: Routes = [
         { path: '', component: HomeComponent },
         { path: 'tournois', component: TournoisComponent },
         { path: 'contact', component: ContactComponent },
-        { path: 'a-propos', component: AProposComponent }
+        { path: 'a-propos', component: AProposComponent },
+        { path: 'register', component: RegisterComponent },
       ]
   },
   { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: '**', component: PageNotFoundComponent }
+  { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({

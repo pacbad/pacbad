@@ -29,10 +29,10 @@ public class AuthentificationResourceImpl {
 	public Response login(final UserLogin user) {
 		try {
 			// Authenticate the user using the credentials provided
-			userService.authenticate(user.login, user.password);
+			userService.authenticate(user.mail, user.password);
 
 			// Issue a token for the user
-			final String token = userService.issueToken(user.login);
+			final String token = userService.issueToken(user.mail);
 
 			final Jws<Claims> claims = userService.getClaims(token);
 
@@ -63,7 +63,7 @@ public class AuthentificationResourceImpl {
 	}
 
 	public static class UserLogin {
-		public String login;
+		public String mail;
 		public String password;
 	}
 

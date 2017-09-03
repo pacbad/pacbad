@@ -3,10 +3,10 @@
   <div class="row content">
     <div class="col-xs-12 col-sm-4 col-sm-offset-4">
         <h2>Connexion</h2>
-        <form name="form" (ngSubmit)="f.form.valid && connecter()" #f="ngForm" novalidate>
-            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !login.valid }">
-                <input type="text" class="form-control" name="login" placeholder="Identifiant" [(ngModel)]="user.login" #login="ngModel" required #txtLogin />
-                <div *ngIf="f.submitted && !login.valid" class="help-block">L'identifiant est obligatoire</div>
+        <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !mail.valid }">
+                <input type="text" class="form-control" name="mail" placeholder="E-mail" [(ngModel)]="user.mail" #mail="ngModel" required #txtMail />
+                <div *ngIf="f.submitted && !mail.valid" class="help-block">L'e-mail est obligatoire</div>
             </div>
             <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
                 <input type="password" class="form-control" name="password" placeholder="Mot de passe" [(ngModel)]="user.password" #password="ngModel" required />
@@ -25,5 +25,3 @@
     </div>
   </div>
 </div>
-
-

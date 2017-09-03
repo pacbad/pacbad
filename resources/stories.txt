@@ -12,6 +12,23 @@ Mon compte est créé
 Je peux me connecter
 J'ai un rôle Joueur par défaut
 
+Types de compte :
+Joueur
+
+Champs :
+Licence
+Mail
+Identifiant
+Mot de passe
+Date de naissance (pour validation fédé)
+
+Calculables (dépuis la fédé) :
+Joueur est responsable d'un club
+Nom
+Prénom
+
+Champs en base :
+Date de création de compte
 
 ###############################
 

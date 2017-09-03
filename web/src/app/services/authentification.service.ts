@@ -20,6 +20,17 @@ export class AuthentificationService {
     
     return loginObs;
   }
+
+  public register(user: User) {
+    let registerObs: Observable<any> = this.http.post(environment.services_basepath + '/auth/register', user);
+    
+    // Stockage des informations de l'utilisateur connecté dans le localStorage
+    registerObs.subscribe(userInfo => {
+      localStorage.setItem('currentUser', JSON.stringify(userInfo));
+    });
+    
+    return registerObs;
+  }
   
   public logout() {
     // remove user from local storage to log user out

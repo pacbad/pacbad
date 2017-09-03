@@ -1,3 +1,54 @@
-<p>
-  register works!
-</p>
+
+
+
+
+
+<div class="container-fluid text-center">
+  <div class="row content">
+    <div class="col-xs-12 col-sm-4 col-sm-offset-4">
+        <h2>Création de compte</h2>
+        <form name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !licence.valid }">
+                <div class="input-group">
+                  <input type="text" class="form-control" name="licence" placeholder="Licence" [(ngModel)]="user.licence" #licence="ngModel" required #txtLicence />
+                  <div class="input-group-btn">
+                    <!-- Buttons -->
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-question-sign">&nbsp;</span> <span class="caret"></span></button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                      <li><a href="http://verybad.fr" target="_blank">Retrouver mon numéro de licence</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div *ngIf="f.submitted && !licence.valid" class="help-block">La licence est obligatoire</div>
+            </div>
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !mail.valid }">
+                <input type="text" class="form-control" name="mail" placeholder="E-mail" [(ngModel)]="user.mail" #mail="ngModel" required />
+                <div *ngIf="f.submitted && !mail.valid" class="help-block">L'email est obligatoire</div>
+            </div>
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+                <input type="password" class="form-control" name="password" placeholder="Mot de passe" [(ngModel)]="user.password" #password="ngModel" required />
+                <div *ngIf="f.submitted && !password.valid" class="help-block">Le mot de passe est obligatoire</div>
+            </div>
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !passwordRepeat.valid }">
+                <input type="passwordRepeat" class="form-control" name="passwordRepeat" placeholder="Répétez le mot de passe" [(ngModel)]="user.passwordRepeat" #passwordRepeat="ngModel" required />
+                <div *ngIf="f.submitted && !passwordRepeat.valid" class="help-block">Le mot de passe est obligatoire</div>
+            </div>
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !dateNaissance.valid }">
+                <label for="dateNaissance">Date de naissance</label>
+                <input type="date" class="form-control" name="dateNaissance" placeholder="Date de naissance" [(ngModel)]="user.dateNaissance" #dateNaissance="ngModel" required />
+                <div *ngIf="f.submitted && !dateNaissance.valid" class="help-block">La date de naissance est obligatoire</div>
+            </div>
+            <div class="form-group has-error" *ngIf="error">
+                <div class="help-block">{{error}}</div>
+            </div>
+            <div class="form-group">
+              <button type="button" routerLink="/" class="btn btn-secondary">Retour</button> &nbsp;
+              <button type="submit" [disabled]="loading" class="btn btn-primary">Valider</button>
+              <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+
