@@ -15,8 +15,16 @@ export class HeaderComponent implements OnInit {
   constructor(private authentificationService: AuthentificationService) { }
   
   ngOnInit() {
-    this.username = this.authentificationService.getUserInfo();
+    let userInfo: any = this.authentificationService.getUserInfo();
+    if (userInfo) {
+      this.username = userInfo.username;
+    }
     this.connecte = this.username != undefined;
+  }
+  
+  logout() {
+    this.authentificationService.logout();
+    window.location.href = '/';
   }
 
 }

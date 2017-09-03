@@ -12,6 +12,7 @@ import { LayoutModule } from './layout/layout.module';
 import { LayoutCommunComponent } from './layout/layout-commun/layout-commun.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 import { TournoisComponent } from './tournois/tournois.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AProposComponent } from './a-propos/a-propos.component';
@@ -27,6 +28,7 @@ const appRoutes: Routes = [
       ]
   },
   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
 
@@ -39,6 +41,7 @@ const appRoutes: Routes = [
     PageNotFoundComponent,
     AProposComponent,
     ContactComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,

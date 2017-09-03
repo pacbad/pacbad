@@ -4,6 +4,13 @@
   border-radius: 0;
 }
 
+.navbar-default .navbar-nav :not(.btn-group) > button.btn, .navbar-default .navbar-nav .btn-group {
+  margin: 0 10px;
+}
+.navbar-default .navbar-nav button.btn {
+  height: 52px;
+}
+
 .navbar-default .navbar-nav a.active, .navbar-default .navbar-nav a.active:focus, .navbar-default .navbar-nav a.active:hover {
   color: #555;
   background-color: #e7e7e7;
@@ -68,6 +75,13 @@ footer .footer-right {
   nav.navbar .navbar-brand {
     height: 50px;
     width: 50px;
+  }
+  
+  .navbar-default .navbar-nav :not(.btn-group) > button.btn, .navbar-default .navbar-nav .btn-group {
+    margin: 5px 10px;
+  }
+  .navbar-default .navbar-nav button.btn {
+    height: 32px;
   }
 }
 
@@ -134,4 +148,12 @@ footer .footer-right {
 .image-ghost {
   float: left;
   margin-right: 10px;
+}
+
+.ng-valid[required], .ng-valid.required  {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form)  {
+  border-left: 5px solid #a94442; /* red */
 }

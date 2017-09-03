@@ -12,7 +12,10 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import fr.pacbad.PacbadTest;
+import fr.pacbad.resources.AuthentificationResourceImpl.UserLogin;
 import fr.pacbad.services.UserService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.impl.DefaultJws;
 
 public class AuthentificationResourceTest extends PacbadTest {
 
@@ -30,7 +33,11 @@ public class AuthentificationResourceTest extends PacbadTest {
 	@Test
 	public void testLoginOk() {
 		Mockito.when(userService.issueToken(ArgumentMatchers.anyString())).thenReturn("abc");
-		final Response response = authentificationResource.login("benjamin", "test");
+		Mockito.when(userService.getClaims("abc")).thenReturn(new DefaultJws<Claims>(null, null, null));
+		final UserLogin userLogin = new UserLogin();
+		userLogin.login = "benjamin";
+		userLogin.password = "test";
+		final Response response = authentificationResource.login(userLogin);
 
 		Assert.assertEquals(200, response.getStatus());
 		Assert.assertNotNull(response.getHeaderString("Authorization"));
@@ -46,7 +53,10 @@ public class AuthentificationResourceTest extends PacbadTest {
 			Assert.fail("Impossible d'initialiser le bouchon");
 		}
 
-		final Response response = authentificationResource.login("benjamin", "test");
+		final UserLogin userLogin = new UserLogin();
+		userLogin.login = "benjamin";
+		userLogin.password = "test";
+		final Response response = authentificationResource.login(userLogin);
 
 		Assert.assertEquals(401, response.getStatus());
 	}

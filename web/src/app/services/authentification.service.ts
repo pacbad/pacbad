@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
+import { User } from '../models/user.model';
 
 import { environment } from '../../environments/environment';
 
@@ -9,17 +10,12 @@ export class AuthentificationService {
 
   constructor(private http: HttpClient) { }
 
-  public login(login: string, password: string) {
-    let loginObs: Observable<any> = this.http.post(environment.services_basepath + '/login', JSON.stringify({ login: login, password: password }));
+  public login(user: User) {
+    let loginObs: Observable<any> = this.http.post(environment.services_basepath + '/auth/login', user);
     
     // Stockage des informations de l'utilisateur connecté dans le localStorage
-    loginObs.subscribe(resp => {
-      let bearer: string = resp.headers.get('Authorization');
-      console.log('bearer = ', bearer);
-      let userInfo: any = resp.body;
-      console.log('userInfo = ', userInfo);
-      localStorage.setItem('currentUser', userInfo);
-      localStorage.setItem('bearer', bearer);
+    loginObs.subscribe(userInfo => {
+      localStorage.setItem('currentUser', JSON.stringify(userInfo));
     });
     
     return loginObs;
@@ -28,15 +24,18 @@ export class AuthentificationService {
   public logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
-    localStorage.removeItem('bearer');
   }
   
   public getUserInfo(): any {
-    return localStorage.getItem('currentUser');
+    return JSON.parse(localStorage.getItem('currentUser'));
   }
-  
-  public getBearer(): string {
-    return localStorage.getItem('bearer');
+
+  public getAuthorizationHeader(): HttpHeaders {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser && currentUser.token) {
+      return new HttpHeaders().set('Authorization', 'Bearer ' + currentUser.token);
+    }
+    return null;
   }
 
 }

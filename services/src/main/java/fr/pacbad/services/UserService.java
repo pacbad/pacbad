@@ -13,6 +13,8 @@ import fr.pacbad.auth.KeyGenerator;
 import fr.pacbad.dao.SimpleDao;
 import fr.pacbad.dao.UserDao;
 import fr.pacbad.entities.User;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -67,6 +69,17 @@ public class UserService extends SimpleService<User> {
 		final String jwtToken = Jwts.builder().setSubject(login).setIssuedAt(new Date()).setExpiration(expirationDate)
 				.signWith(SignatureAlgorithm.HS512, key).compact();
 		return jwtToken;
+	}
+
+	public Jws<Claims> getClaims(final String token) {
+		final Key key = keyGenerator.getKey();
+		final Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
+		claims.getBody().put("token", token);
+		final User u = getByLogin(claims.getBody().getSubject());
+		// TODO Renseigner dans le username le vrai nom de la personne, plutôt que son
+		// login ?
+		claims.getBody().put("username", u.getLogin());
+		return claims;
 	}
 
 }

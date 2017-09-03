@@ -15,8 +15,24 @@
         <li><a routerLink="/tournois" routerLinkActive="active">Tournois <span class="badge">286</span></a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li *ngIf="!connecte"><a routerLink="/login"><span class="glyphicon glyphicon-log-in"></span> Connexion</a></li>
-        <li *ngIf="connecte"><a routerLink="/compte"><span class="glyphicon glyphicon-user"></span> {{username}}</a></li>
+        <li *ngIf="!connecte"><button routerLink="/register" class="btn btn-danger"><span class="glyphicon glyphicon-plus"></span> Créer un compte</button></li>
+        <li *ngIf="!connecte"><button routerLink="/login" class="btn btn-info"><span class="glyphicon glyphicon-log-in"></span> Se connecter</button></li>
+        <li *ngIf="connecte">
+          <div class="btn-group">
+            <button routerLink="/compte" type="button" class="btn btn-info"><span class="glyphicon glyphicon-user"></span> {{username}}</button>
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="caret"></span>
+              <span class="sr-only">Menu</span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a routerLink="/compte">Mon compte</a></li>
+              <li><a href="#">Another action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="#" (click)="logout()">Se déconnecter</a></li>
+            </ul>
+          </div>
+        </li>
       </ul>
     </div>
   </div>

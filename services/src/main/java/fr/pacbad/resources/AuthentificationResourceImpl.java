@@ -2,12 +2,10 @@ package fr.pacbad.resources;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -15,6 +13,8 @@ import javax.ws.rs.core.Response.Status;
 import fr.pacbad.AuthNeeded;
 import fr.pacbad.filter.AuthFilter;
 import fr.pacbad.services.UserService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 
 @Path("/auth")
 public class AuthentificationResourceImpl {
@@ -24,18 +24,20 @@ public class AuthentificationResourceImpl {
 
 	@POST
 	@Path("/login")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response login(@FormParam("login") final String login, @FormParam("password") final String password) {
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response login(final UserLogin user) {
 		try {
 			// Authenticate the user using the credentials provided
-			userService.authenticate(login, password);
+			userService.authenticate(user.login, user.password);
 
 			// Issue a token for the user
-			final String token = userService.issueToken(login);
+			final String token = userService.issueToken(user.login);
+
+			final Jws<Claims> claims = userService.getClaims(token);
 
 			// Return the token on the response
-			// TODO Renvoyer le userinfo dans le corps de la réponse
-			return Response.ok().header(HttpHeaders.AUTHORIZATION, "Bearer " + token).build();
+			return Response.ok(claims.getBody()).build();
 
 		} catch (final Exception e) {
 			return Response.status(Status.UNAUTHORIZED).build();
@@ -58,6 +60,11 @@ public class AuthentificationResourceImpl {
 	@AuthNeeded
 	public Object getUserInfo() {
 		return AuthFilter.getClaims().getBody();
+	}
+
+	public static class UserLogin {
+		public String login;
+		public String password;
 	}
 
 }
