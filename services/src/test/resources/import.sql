@@ -1,1 +1,1 @@
-insert into User(login, hash) values('test', 'f7fc424486cc16fb42ebcf003d20908e9dedc1e738f371121deeed3db1a1ce6b3872156d4fb155e1d9ad66100e977d7cf3f05b2bd9501c0b13d864cd61912e80');
+insert into User(identifiant, hash) values('test', 'f7fc424486cc16fb42ebcf003d20908e9dedc1e738f371121deeed3db1a1ce6b3872156d4fb155e1d9ad66100e977d7cf3f05b2bd9501c0b13d864cd61912e80');

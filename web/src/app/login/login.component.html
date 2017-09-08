@@ -4,9 +4,9 @@
     <div class="col-xs-12 col-sm-4 col-sm-offset-4">
         <h2>Connexion</h2>
         <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
-            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !mail.valid }">
-                <input type="text" class="form-control" name="mail" placeholder="E-mail" [(ngModel)]="user.mail" #mail="ngModel" required #txtMail />
-                <div *ngIf="f.submitted && !mail.valid" class="help-block">L'e-mail est obligatoire</div>
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !identifiant.valid }">
+                <input type="text" class="form-control" name="identifiant" placeholder="Identifiant" [(ngModel)]="user.identifiant" #identifiant="ngModel" required #txtIdentifiant />
+                <div *ngIf="f.submitted && !identifiant.valid" class="help-block">L'identifiant est obligatoire</div>
             </div>
             <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
                 <input type="password" class="form-control" name="password" placeholder="Mot de passe" [(ngModel)]="user.password" #password="ngModel" required />

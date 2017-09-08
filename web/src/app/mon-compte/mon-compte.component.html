@@ -1,35 +1,36 @@
 
 
 
-
-
 <div class="container-fluid text-center">
   <div class="row content">
     <div class="col-xs-16 col-sm-6 col-sm-offset-3">
-        <h2>Création de compte</h2>
-        <form name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate class="form-horizontal">
+        <h2>Bonjour {{user.prenom}}</h2>
+        <form name="form" (ngSubmit)="f.form.valid && update()" #f="ngForm" novalidate class="form-horizontal">
             <fieldset>
               <legend>Informations du compte</legend>
-              <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !identifiant.valid }">
+              <div class="form-group">
                   <label for="identifiant" class="col-sm-6 control-label">Identifiant</label>
                   <div class="col-sm-6 col-xs-12 input-group">
-                    <input type="text" class="form-control" name="identifiant" placeholder="Identifiant" [(ngModel)]="user.identifiant" #identifiant="ngModel" required #txtIdentifiant />
+                    <input type="text" class="form-control" name="identifiant" placeholder="Identifiant" [(ngModel)]="user.identifiant" #identifiant="ngModel" disabled />
                   </div>
-                  <div *ngIf="f.submitted && !identifiant.valid" class="help-block">L'identifiant est obligatoire</div>
+              </div>
+              <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !ancienPassword.valid }">
+                  <label for="ancienPassword" class="col-sm-6 control-label">Ancien mot de passe</label>
+                  <div class="col-sm-6 col-xs-12 input-group">
+                    <input type="password" class="form-control" name="ancienPassword" placeholder="Ancien mot de passe" [(ngModel)]="user.ancienPassword" #ancienPassword="ngModel" />
+                  </div>
               </div>
               <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
-                  <label for="password" class="col-sm-6 control-label">Mot de passe</label>
+                  <label for="password" class="col-sm-6 control-label">Nouveau mot de passe</label>
                   <div class="col-sm-6 col-xs-12 input-group">
-                    <input type="password" class="form-control" name="password" placeholder="Mot de passe" [(ngModel)]="user.password" #password="ngModel" required />
+                    <input type="password" class="form-control" name="password" placeholder="Nouveau mot de passe" [(ngModel)]="user.password" #password="ngModel" />
                   </div>
-                  <div *ngIf="f.submitted && !password.valid" class="help-block">Le mot de passe est obligatoire</div>
               </div>
               <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !passwordRepeat.valid }">
                   <label for="passwordRepeat" class="col-sm-6 control-label">Répétez le mot de passe</label>
                   <div class="col-sm-6 col-xs-12 input-group">
-                    <input type="password" class="form-control" name="passwordRepeat" placeholder="Répétez le mot de passe" [(ngModel)]="user.passwordRepeat" #passwordRepeat="ngModel" required />
+                    <input type="password" class="form-control" name="passwordRepeat" placeholder="Répétez le mot de passe" [(ngModel)]="user.passwordRepeat" #passwordRepeat="ngModel" />
                   </div>
-                  <div *ngIf="f.submitted && !passwordRepeat.valid" class="help-block">Le mot de passe est obligatoire</div>
               </div>
               <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !mail.valid }">
                   <label for="mail" class="col-sm-6 control-label">E-mail</label>
@@ -41,26 +42,23 @@
             </fieldset>
             <fieldset>
               <legend>Informations FFBaD</legend>
-              <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !licence.valid }">
+              <div class="form-group">
                   <label for="licence" class="col-sm-6 control-label">Licence</label>
                   <div class="col-sm-6 col-xs-12 input-group">
-                    <input type="number" max="99999999" class="form-control" name="licence" placeholder="Licence" [(ngModel)]="user.licence" #licence="ngModel" required #txtLicence />
-                    <div class="input-group-btn">
-                      <!-- Buttons -->
-                      <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-question-sign"></span></button>
-                      <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a href="http://verybad.fr" target="_blank">Retrouver mon numéro de licence</a></li>
-                      </ul>
-                    </div>
+                    <input type="number" class="form-control" name="licence" placeholder="Licence" [(ngModel)]="user.licence" disabled />
                   </div>
-                  <div *ngIf="f.submitted && !licence.valid" class="help-block">La licence est obligatoire</div>
               </div>
-              <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !dateNaissance.valid }">
-                  <label for="dateNaissance" class="col-sm-6 control-label">Date de naissance</label>
+              <div class="form-group">
+                  <label for="nom" class="col-sm-6 control-label">Nom</label>
                   <div class="col-sm-6 col-xs-12 input-group">
-                    <input type="date" class="form-control" name="dateNaissance" placeholder="Date de naissance" [(ngModel)]="user.dateNaissance" #dateNaissance="ngModel" required />
+                    <input type="text" class="form-control" name="nom" placeholder="Nom" [(ngModel)]="user.nom" disabled />
                   </div>
-                  <div *ngIf="f.submitted && !dateNaissance.valid" class="help-block">La date de naissance est obligatoire</div>
+              </div>
+              <div class="form-group">
+                  <label for="prenom" class="col-sm-6 control-label">Prénom</label>
+                  <div class="col-sm-6 col-xs-12 input-group">
+                    <input type="text" class="form-control" name="prenom" placeholder="Prénom" [(ngModel)]="user.prenom" disabled />
+                  </div>
               </div>
             </fieldset>
             <div class="form-group has-error" *ngIf="error">
@@ -68,7 +66,7 @@
             </div>
             <div class="form-group">
               <button type="button" routerLink="/" class="btn btn-secondary">Retour</button> &nbsp;
-              <button type="submit" [disabled]="loading" class="btn btn-primary">Valider</button>
+              <button type="submit" [disabled]="loading" class="btn btn-primary">Mettre à jour</button>
               <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
             </div>
         </form>

@@ -27,11 +27,10 @@ public class AuthFilter implements ContainerRequestFilter {
 
 	@Override
 	public void filter(final ContainerRequestContext request) {
-		System.out.println("Start AuthFilter");
-
 		// Get the HTTP Authorization header from the request
 		final String authorizationHeader = request.getHeaderString(HttpHeaders.AUTHORIZATION);
 		if (authorizationHeader == null) {
+			System.err.println("Header Authorization absent");
 			throw new WebApplicationException("Missing Authorization header", Response.Status.UNAUTHORIZED);
 		}
 
@@ -45,6 +44,7 @@ public class AuthFilter implements ContainerRequestFilter {
 			THREAD_LOCAL_CLAIMS.set(claims);
 
 		} catch (final Exception e) {
+			System.err.println("Jeton invalide : " + e.toString());
 			throw new WebApplicationException(e, Response.Status.UNAUTHORIZED);
 		}
 	}

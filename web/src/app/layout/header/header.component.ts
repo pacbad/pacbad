@@ -3,6 +3,8 @@ import {Observable} from 'rxjs/Observable';
 
 import { AuthentificationService } from '../../services/authentification.service';
 
+import {Claims} from '../../models/user.model';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html'
@@ -10,16 +12,17 @@ import { AuthentificationService } from '../../services/authentification.service
 export class HeaderComponent implements OnInit {
 
   private connecte: boolean;
-  private username: string;
+  private userInfo: Claims;
 
   constructor(private authentificationService: AuthentificationService) { }
   
   ngOnInit() {
     let userInfo: any = this.authentificationService.getUserInfo();
-    if (userInfo) {
-      this.username = userInfo.username;
+    this.userInfo = userInfo;
+    this.connecte = false;
+    if (this.userInfo) {
+      this.connecte = this.userInfo.identifiant != undefined;
     }
-    this.connecte = this.username != undefined;
   }
   
   logout() {

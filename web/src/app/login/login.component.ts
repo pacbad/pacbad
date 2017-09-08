@@ -9,7 +9,7 @@ import { AuthentificationService } from '../services/authentification.service';
 })
 export class LoginComponent implements OnInit, AfterViewInit {
   
-  @ViewChildren('txtMail') txtMail;
+  @ViewChildren('txtIdentifiant') txtIdentifiant;
   
   user: User;
   loading: boolean;
@@ -22,19 +22,22 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
   
   ngAfterViewInit() {
-    this.txtMail.first.nativeElement.focus();
+    this.txtIdentifiant.first.nativeElement.focus();
   }
   
   public login() {
     this.loading = true;
     this.authentificationService.login(this.user)
+      .finally(
+        () => {
+          this.loading = false;
+        }
+      )
       .subscribe(
         ok => {
-          this.loading = false;
           window.location.href = '/';
         },
         err => {
-          this.loading = false;
           this.error = true;
         });
   }

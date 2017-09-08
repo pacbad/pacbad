@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {HttpClientModule} from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule }   from '@angular/forms';
 
@@ -18,6 +18,9 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { AProposComponent } from './a-propos/a-propos.component';
 import { ContactComponent } from './contact/contact.component';
 
+import { AuthHttpInterceptor } from './services/authentification.interceptor';
+import { MonCompteComponent } from './mon-compte/mon-compte.component';
+
 const appRoutes: Routes = [
   { path: '', component: LayoutCommunComponent,
     children: [
@@ -26,6 +29,7 @@ const appRoutes: Routes = [
         { path: 'contact', component: ContactComponent },
         { path: 'a-propos', component: AProposComponent },
         { path: 'register', component: RegisterComponent },
+        { path: 'compte', component: MonCompteComponent },
       ]
   },
   { path: 'login', component: LoginComponent },
@@ -42,6 +46,7 @@ const appRoutes: Routes = [
     AProposComponent,
     ContactComponent,
     RegisterComponent,
+    MonCompteComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,7 +56,9 @@ const appRoutes: Routes = [
     ServicesModule,
     LayoutModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -31,7 +31,7 @@ public class UserService extends SimpleService<User> {
 	}
 
 	public void authenticate(final String login, final String password) throws Exception {
-		final User u = getByLogin(login);
+		final User u = getByIdentifiant(login);
 		final String hash = hash(password);
 		if (u != null && hash.equals(u.getHash())) {
 			return;
@@ -39,8 +39,24 @@ public class UserService extends SimpleService<User> {
 		throw new Exception("Impossible de se connecter : utilisateur ou mot de passe incorrect");
 	}
 
-	public User getByLogin(final String login) {
-		return getDao().getByColumn("login", login);
+	public void register(final User user) throws Exception {
+		// Règles de gestion :
+		// Vérifier que le login n'est pas déjà utilisé
+		final User userAvecMemeLogin = getByIdentifiant(user.getIdentifiant());
+		if (userAvecMemeLogin != null) {
+			throw new Exception("Identifiant déjà utilisé : " + userAvecMemeLogin.getIdentifiant());
+		}
+
+		// TODO Vérifier auprès de la fédération que la licence est valide avec la date
+		// de naissance saisie
+
+		// Enregistrement de l'utilisateur en base
+		user.setHash(hash(user.getPassword()));
+		create(user);
+	}
+
+	public User getByIdentifiant(final String identifiant) {
+		return getDao().getByColumn("identifiant", identifiant);
 	}
 
 	public String hash(final String password) {
@@ -54,7 +70,7 @@ public class UserService extends SimpleService<User> {
 				sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
 			}
 			hash = sb.toString();
-		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+		} catch (final NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new RuntimeException("Impossible de créer un hash pour le mot de passe", e);
 		}
 		return hash;
@@ -75,11 +91,25 @@ public class UserService extends SimpleService<User> {
 		final Key key = keyGenerator.getKey();
 		final Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
 		claims.getBody().put("token", token);
-		final User u = getByLogin(claims.getBody().getSubject());
-		// TODO Renseigner dans le username le vrai nom de la personne, plutôt que son
-		// login ?
-		claims.getBody().put("username", u.getLogin());
+		final User u = getByIdentifiant(claims.getBody().getSubject());
+
+		claims.getBody().put("prenom", u.getPrenom());
+		claims.getBody().put("nom", u.getNom());
+		claims.getBody().put("licence", u.getLicence());
+		claims.getBody().put("mail", u.getMail());
+
 		return claims;
+	}
+
+	public User updateCompte(final User user) {
+		final User u = getByIdentifiant(user.getIdentifiant());
+		// mise à jour du mot de passe
+		if (user.getPassword() != null) {
+			u.setHash(hash(user.getPassword()));
+		}
+		// mise à jour du mail
+		u.setMail(user.getMail());
+		return update(u);
 	}
 
 }

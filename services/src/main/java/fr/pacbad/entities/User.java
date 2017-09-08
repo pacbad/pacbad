@@ -1,5 +1,7 @@
 package fr.pacbad.entities;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,11 +16,31 @@ public class User implements SimpleEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "login")
-	private String login;
+	@Column(name = "identifiant")
+	private String identifiant;
 
 	@Column(name = "hash")
 	private String hash;
+
+	@Column(name = "mail")
+	private String mail;
+
+	@Column(name = "licence")
+	private Long licence;
+
+	/* Champs non renseignés mais issus de la base fédérale */
+
+	@Column(name = "nom")
+	private String nom;
+
+	@Column(name = "prenom")
+	private String prenom;
+
+	/* Champs non stockés en base, mais nécessaire pour dialoguer avec le client */
+
+	private String ancienPassword;
+	private String password;
+	private Date dateNaissance;
 
 	@Override
 	public Long getId() {
@@ -29,12 +51,12 @@ public class User implements SimpleEntity {
 		this.id = id;
 	}
 
-	public String getLogin() {
-		return login;
+	public String getIdentifiant() {
+		return identifiant;
 	}
 
-	public void setLogin(final String login) {
-		this.login = login;
+	public void setIdentifiant(final String identifiant) {
+		this.identifiant = identifiant;
 	}
 
 	public String getHash() {
@@ -43,6 +65,62 @@ public class User implements SimpleEntity {
 
 	public void setHash(final String hash) {
 		this.hash = hash;
+	}
+
+	public String getMail() {
+		return mail;
+	}
+
+	public void setMail(final String mail) {
+		this.mail = mail;
+	}
+
+	public Long getLicence() {
+		return licence;
+	}
+
+	public void setLicence(final Long licence) {
+		this.licence = licence;
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(final String nom) {
+		this.nom = nom;
+	}
+
+	public String getPrenom() {
+		return prenom;
+	}
+
+	public void setPrenom(final String prenom) {
+		this.prenom = prenom;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(final String password) {
+		this.password = password;
+	}
+
+	public Date getDateNaissance() {
+		return dateNaissance;
+	}
+
+	public void setDateNaissance(final Date dateNaissance) {
+		this.dateNaissance = dateNaissance;
+	}
+
+	public String getAncienPassword() {
+		return ancienPassword;
+	}
+
+	public void setAncienPassword(final String ancienPassword) {
+		this.ancienPassword = ancienPassword;
 	}
 
 }

@@ -19,7 +19,7 @@
         <li *ngIf="!connecte"><button routerLink="/login" class="btn btn-info"><span class="glyphicon glyphicon-log-in"></span> Me connecter</button></li>
         <li *ngIf="connecte">
           <div class="btn-group">
-            <button routerLink="/compte" type="button" class="btn btn-info"><span class="glyphicon glyphicon-user"></span> {{username}}</button>
+            <button routerLink="/compte" type="button" class="btn btn-info"><span class="glyphicon glyphicon-user"></span> {{userInfo?.prenom}} ({{userInfo?.identifiant}})</button>
             <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <span class="caret"></span>
               <span class="sr-only">Menu</span>

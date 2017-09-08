@@ -38,7 +38,7 @@ public class DemoAuthResourceImpl {
 	@Produces(MediaType.APPLICATION_JSON)
 	@AuthNeeded
 	public User setPassword(final String password) {
-		final User u = userService.getByLogin(AuthFilter.getUserLogin());
+		final User u = userService.getByIdentifiant(AuthFilter.getUserLogin());
 		u.setHash(userService.hash(password));
 		userService.update(u);
 		return u;

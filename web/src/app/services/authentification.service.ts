@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/do';
 import { User } from '../models/user.model';
 
 import { environment } from '../../environments/environment';
@@ -14,27 +15,51 @@ export class AuthentificationService {
     let loginObs: Observable<any> = this.http.post(environment.services_basepath + '/auth/login', user);
     
     // Stockage des informations de l'utilisateur connecté dans le localStorage
-    loginObs.subscribe(userInfo => {
+    return loginObs.do(userInfo => {
+      userInfo.identifiant = userInfo.sub;
       localStorage.setItem('currentUser', JSON.stringify(userInfo));
     });
-    
-    return loginObs;
   }
 
   public register(user: User) {
     let registerObs: Observable<any> = this.http.post(environment.services_basepath + '/auth/register', user);
     
     // Stockage des informations de l'utilisateur connecté dans le localStorage
-    registerObs.subscribe(userInfo => {
+    return registerObs.do(userInfo => {
+      userInfo.identifiant = userInfo.sub;
       localStorage.setItem('currentUser', JSON.stringify(userInfo));
     });
+  }
+
+  public update(user: User) {
+    let updateObs: Observable<any> = this.http.put(environment.services_basepath + '/auth/user', user);
     
-    return registerObs;
+    // Stockage des informations de l'utilisateur connecté dans le localStorage
+    return updateObs.do(userInfo => {
+      userInfo.identifiant = userInfo.sub;
+      localStorage.setItem('currentUser', JSON.stringify(userInfo));
+    });
+  }
+
+  public getInfoFromServer(): Observable<User> {
+    return this.http.get(environment.services_basepath + '/auth/user');
   }
   
   public logout() {
+    this.clearSession();
+  }
+  
+  public clearSession() {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
+  }
+  
+  public validateToken() {
+    let headers: HttpHeaders = this.getAuthorizationHeader();
+    if (headers) {
+      this.http.post(environment.services_basepath + '/auth/validate', {})
+        .subscribe();
+    }
   }
   
   public getUserInfo(): any {

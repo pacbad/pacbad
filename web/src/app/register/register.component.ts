@@ -9,7 +9,7 @@ import { AuthentificationService } from '../services/authentification.service';
 })
 export class RegisterComponent implements OnInit, AfterViewInit {
 
-  @ViewChildren('txtLicence') txtLicence;
+  @ViewChildren('txtIdentifiant') txtIdentifiant;
   
   user: User;
   loading: boolean;
@@ -22,22 +22,30 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   }
   
   ngAfterViewInit() {
-    this.txtLicence.first.nativeElement.focus();
+    this.txtIdentifiant.first.nativeElement.focus();
   }
   
   public register() {
-    // TODO Vérification du mot de passe répété
+    this.error = undefined;
+    
+    if (this.user.password !== this.user.passwordRepeat) {
+      this.error = "Erreur dans la répétition du mot de passe";
+      return;
+    }
     
     this.loading = true;
     this.authentificationService.register(this.user)
+      .finally(
+        () => {
+          this.loading = false;
+        }
+      )
       .subscribe(
         ok => {
-          this.loading = false;
           window.location.href = '/';
         },
         err => {
-          this.loading = false;
-          this.error = err;
+          this.error = JSON.stringify(err);
         });
   }
 
