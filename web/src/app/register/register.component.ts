@@ -33,8 +33,12 @@ export class RegisterComponent implements OnInit, AfterViewInit {
       return;
     }
     
+    let userSent: User = new User();
+    Object.assign(userSent, this.user);
+    userSent.passwordRepeat = undefined;
+    
     this.loading = true;
-    this.authentificationService.register(this.user)
+    this.authentificationService.register(userSent)
       .finally(
         () => {
           this.loading = false;
