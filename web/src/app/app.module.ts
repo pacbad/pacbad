@@ -23,6 +23,8 @@ import { AuthHttpInterceptor } from './services/authentification.interceptor';
 import { MonCompteComponent } from './mon-compte/mon-compte.component';
 import { ErreurComponent } from './erreur/erreur.component';
 
+import {TournoiService} from './tournois/tournoi.service';
+
 const appRoutes: Routes = [
   { path: '', component: LayoutCommunComponent,
     children: [
@@ -62,7 +64,8 @@ const appRoutes: Routes = [
     CommunModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true },
+    TournoiService
   ],
   bootstrap: [AppComponent]
 })

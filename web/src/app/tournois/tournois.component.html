@@ -14,20 +14,13 @@
           <th>Date fin</th>
         </tr>
       
-        <tr>
-          <td>Gradignan</td>
-          <td>07/10/2017</td>
-          <td>08/10/2017</td>
-        </tr>
-        <tr>
-          <td>Palaiseau</td>
-          <td>02/07/2018</td>
-          <td>03/07/2018</td>
+        <tr *ngFor="let tournoi of tournois">
+          <td>{{tournoi.nom}}</td>
+          <td>{{tournoi.dateDebut|date:"dd/MM/yyyy"}}</td>
+          <td>{{tournoi.dateFin|date:"dd/MM/yyyy"}}</td>
         </tr>
       </table>
         
     </div>
   </div>
 </div>
-
-  
