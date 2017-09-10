@@ -87,16 +87,18 @@ public class UserService extends SimpleService<User> {
 		return jwtToken;
 	}
 
-	public Jws<Claims> getClaims(final String token) {
+	public Jws<Claims> getClaims(final String token, final User u) {
 		final Key key = keyGenerator.getKey();
 		final Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
-		claims.getBody().put("token", token);
-		final User u = getByIdentifiant(claims.getBody().getSubject());
 
-		claims.getBody().put("prenom", u.getPrenom());
-		claims.getBody().put("nom", u.getNom());
-		claims.getBody().put("licence", u.getLicence());
-		claims.getBody().put("mail", u.getMail());
+		claims.getBody().put("token", token);
+
+		if (u != null) {
+			claims.getBody().put("prenom", u.getPrenom());
+			claims.getBody().put("nom", u.getNom());
+			claims.getBody().put("licence", u.getLicence());
+			claims.getBody().put("mail", u.getMail());
+		}
 
 		return claims;
 	}

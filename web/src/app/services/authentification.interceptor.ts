@@ -23,16 +23,20 @@ export class AuthHttpInterceptor implements HttpInterceptor {
     
     return next.handle(req)
       .catch(err => {
+        let handled: boolean = false;
         if (err instanceof HttpErrorResponse) {
             if (err.status === 401 && err.url.indexOf('/auth/login') == -1) {
                // JWT expired, go to login
                // Observable.throw(err);
               localStorage.removeItem('currentUser');
-              window.location.href = '/login';
+              window.location.href = '/login?redirect=' + window.location.href;
+              handled = true;
             }
           }
           return new Observable(observer => {
-            observer.error(err);
+            if (!handled) {
+              observer.error(err);
+            }
           });
       });
 

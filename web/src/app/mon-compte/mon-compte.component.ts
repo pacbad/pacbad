@@ -10,6 +10,8 @@ import 'rxjs/add/operator/finally';
 })
 export class MonCompteComponent implements OnInit {
   
+  ready: boolean;
+  
   user: User;
   loading: boolean;
   error: string;
@@ -22,6 +24,9 @@ export class MonCompteComponent implements OnInit {
     this.authentificationService.getInfoFromServer()
       .subscribe(res => {
         this.user = res;
+        this.ready = true;
+      }, err => {
+        window.location.href = '/erreur';
       });
   }
   

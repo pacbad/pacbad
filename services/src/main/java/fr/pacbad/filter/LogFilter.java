@@ -54,7 +54,13 @@ public class LogFilter implements Filter {
 				message += httpRequest.getRequestURI() + " --> ";
 				message += httpResponse.getStatus();
 				message += " (" + duration + "ms)";
-				LOGGER.info(message);
+				if (!"OPTIONS".equalsIgnoreCase(httpRequest.getMethod())) {
+					LOGGER.info(message);
+				}
+
+				// Supprimer l'utilisateur connecté du ThreadLocal. Dépendance entre les filtres
+				// :(
+				AuthFilter.clear();
 			}
 		} else {
 			chain.doFilter(request, response);

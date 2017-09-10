@@ -33,15 +33,19 @@ public class AuthentificationResourceImpl {
 			// Authenticate the user using the credentials provided
 			userService.authenticate(user.getIdentifiant(), user.getPassword());
 
-			// Issue a token for the user
-			final String token = userService.issueToken(user.getIdentifiant());
+			// Lecture de l'utilisateur en base
+			final User u = userService.getByIdentifiant(user.getIdentifiant());
 
-			final Jws<Claims> claims = userService.getClaims(token);
+			// Issue a token for the user
+			final String token = userService.issueToken(u.getIdentifiant());
+
+			final Jws<Claims> claims = userService.getClaims(token, u);
 
 			// Return the token on the response
 			return Response.ok(claims.getBody()).build();
 
 		} catch (final Exception e) {
+			e.printStackTrace();
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 	}
@@ -92,7 +96,7 @@ public class AuthentificationResourceImpl {
 	@Produces(MediaType.APPLICATION_JSON)
 	@AuthNeeded
 	public User getUser() {
-		final User u = userService.getByIdentifiant(AuthFilter.getUserLogin());
+		final User u = AuthFilter.getUser();
 		u.setHash(null);
 		u.setAncienPassword(null);
 		u.setPassword(null);
@@ -123,9 +127,8 @@ public class AuthentificationResourceImpl {
 					.build();
 		}
 		final User u = userService.updateCompte(user);
-		final Claims claims = AuthFilter.getClaims().getBody();
-		claims.put("mail", u.getMail());
-		return Response.ok(claims).build();
+		final Jws<Claims> claims = userService.getClaims((String) AuthFilter.getClaims().getBody().get("token"), u);
+		return Response.ok(claims.getBody()).build();
 	}
 
 }

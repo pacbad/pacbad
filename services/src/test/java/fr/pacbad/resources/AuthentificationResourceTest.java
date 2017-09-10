@@ -35,10 +35,11 @@ public class AuthentificationResourceTest extends PacbadTest {
 	public void testLoginOk() {
 		Mockito.when(userService.issueToken(ArgumentMatchers.anyString())).thenReturn("abc");
 		final Claims claims = new DefaultClaims();
-		Mockito.when(userService.getClaims("abc")).thenReturn(new DefaultJws<Claims>(null, claims, null));
 		final User user = new User();
 		user.setIdentifiant("benjamin");
 		user.setPassword("test");
+		Mockito.when(userService.getClaims("abc", user)).thenReturn(new DefaultJws<Claims>(null, claims, null));
+		Mockito.when(userService.getByIdentifiant("benjamin")).thenReturn(user);
 		final Response response = authentificationResource.login(user);
 
 		Assert.assertEquals(200, response.getStatus());

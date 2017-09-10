@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 
 import { ServicesModule } from './services/services.module';
 import { LayoutModule } from './layout/layout.module';
+import { CommunModule } from './commun/commun.module';
 
 import { LayoutCommunComponent } from './layout/layout-commun/layout-commun.component';
 import { HomeComponent } from './home/home.component';
@@ -20,19 +21,21 @@ import { ContactComponent } from './contact/contact.component';
 
 import { AuthHttpInterceptor } from './services/authentification.interceptor';
 import { MonCompteComponent } from './mon-compte/mon-compte.component';
+import { ErreurComponent } from './erreur/erreur.component';
 
 const appRoutes: Routes = [
   { path: '', component: LayoutCommunComponent,
     children: [
         { path: '', component: HomeComponent },
-        { path: 'tournois', component: TournoisComponent },
-        { path: 'contact', component: ContactComponent },
-        { path: 'a-propos', component: AProposComponent },
-        { path: 'register', component: RegisterComponent },
-        { path: 'compte', component: MonCompteComponent },
+        { path: 'tournois', component: TournoisComponent, data: { title: 'Tournois' } },
+        { path: 'contact', component: ContactComponent, data: { title: 'Contact' } },
+        { path: 'a-propos', component: AProposComponent, data: { title: 'A propos' } },
+        { path: 'register', component: RegisterComponent, data: { title: 'Créer un compte' } },
+        { path: 'compte', component: MonCompteComponent, data: { title: 'Mon compte', login: true } },
       ]
   },
   { path: 'login', component: LoginComponent },
+  { path: 'erreur', component: ErreurComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
 
@@ -47,6 +50,7 @@ const appRoutes: Routes = [
     ContactComponent,
     RegisterComponent,
     MonCompteComponent,
+    ErreurComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,7 +58,8 @@ const appRoutes: Routes = [
     FormsModule,
     RouterModule.forRoot(appRoutes),
     ServicesModule,
-    LayoutModule
+    LayoutModule,
+    CommunModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true }

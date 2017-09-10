@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChildren } from '@angular/core';
+import {ActivatedRoute, Params} from '@angular/router';
 
 import { User } from '../models/user.model';
 import { AuthentificationService } from '../services/authentification.service';
@@ -14,11 +15,18 @@ export class LoginComponent implements OnInit, AfterViewInit {
   user: User;
   loading: boolean;
   error: boolean;
+  
+  redirectUri: string;
 
-  constructor(private authentificationService: AuthentificationService) { }
+  constructor(private activatedRoute: ActivatedRoute, private authentificationService: AuthentificationService) { }
   
   ngOnInit() {
     this.user = new User();
+    
+    this.activatedRoute.queryParams
+      .subscribe((queryParams: Params) => {
+        this.redirectUri = queryParams['redirect'];
+      });
   }
   
   ngAfterViewInit() {
@@ -35,7 +43,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
       )
       .subscribe(
         ok => {
-          window.location.href = '/';
+          let redirect: string = '/';
+          if (this.redirectUri) {
+            redirect = this.redirectUri;
+          }
+          window.location.href = redirect;
         },
         err => {
           this.error = true;
