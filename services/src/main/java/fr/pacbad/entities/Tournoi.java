@@ -13,6 +13,15 @@ import javax.persistence.TemporalType;
 @Entity(name = "Tournoi")
 public class Tournoi implements SimpleEntity {
 
+	public Tournoi() {
+	}
+
+	public Tournoi(final String nom, final Date dateDebut, final Date dateFin) {
+		this.nom = nom;
+		this.dateDebut = dateDebut;
+		this.dateFin = dateFin;
+	}
+
 	@Column(name = "id")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
