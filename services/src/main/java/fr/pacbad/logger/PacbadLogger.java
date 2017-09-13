@@ -49,11 +49,20 @@ public class PacbadLogger {
 		log(Level.ERROR, message);
 	}
 
-	public void log(final Level level, final String message) {
+	public void error(final String message, final Throwable t) {
+		log(Level.ERROR, message, t);
+	}
+
+	private void log(final Level level, final String message) {
+		log(level, message, null);
+	}
+
+	private void log(final Level level, final String message, final Throwable t) {
 		final LogEntry entry = new LogEntry();
 		entry.timestamp = System.currentTimeMillis();
 		entry.level = level;
 		entry.message = message;
+		entry.exception = t;
 		entry.loggerClass = clazz;
 		for (final LogHandler handler : handlers) {
 			handler.log(entry);

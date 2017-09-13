@@ -163,9 +163,20 @@ footer .footer-right {
   border-left: 5px solid #a94442; /* red */
 }
 
-.chargement-ecran {
+.chargement-ecran, .chargement-mask {
   height: 100%;
   width: 100%;
   padding: 40px;
   text-align: center;
+}
+
+.chargement-mask {
+  position: absolute;
+  z-index: 1000;
+  background-color: #eee;
+  opacity: 0.6;
+}
+
+.chargement-mask svg {
+  position: fixed;
 }

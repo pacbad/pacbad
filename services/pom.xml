@@ -79,8 +79,20 @@
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<version>2.4.0</version>
-<!-- 			Dépendance utilisée pour le moment pour le déploiement -->
-<!-- 			<scope>test</scope> -->
+			<!-- Dépendance utilisée pour le moment pour le déploiement avec Jetty -->
+			<!-- <scope>test</scope> -->
+		</dependency>
+
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
 		</dependency>
 
 		<!-- Tests -->

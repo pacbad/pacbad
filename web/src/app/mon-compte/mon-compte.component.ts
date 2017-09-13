@@ -56,9 +56,12 @@ export class MonCompteComponent implements OnInit {
       .subscribe(
         ok => {
           this.information = "Information correctement modifiées";
+          this.user.password = "";
+          this.user.passwordRepeat = "";
+          this.user.ancienPassword = "";
         },
         err => {
-          this.error = "Impossible de modifier les informations du compte"; // JSON.stringify(err);
+          this.error = "Impossible de modifier les informations du compte : " + err.error.message;
         });
   }
 

@@ -1,14 +1,18 @@
 package fr.pacbad.resources;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response.Status;
 
 import fr.pacbad.AuthNeeded;
 import fr.pacbad.entities.User;
+import fr.pacbad.exception.ExceptionFonctionnelle;
 import fr.pacbad.filter.AuthFilter;
 import fr.pacbad.services.UserService;
 
@@ -42,6 +46,22 @@ public class DemoAuthResourceImpl {
 		u.setHash(userService.hash(password));
 		userService.update(u);
 		return u;
+	}
+
+	@GET
+	@Path("exceptionFonctionnelle")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void testExceptionFonctionnelle() throws ExceptionFonctionnelle {
+		final Exception cause = new Exception("cause");
+		throw new ExceptionFonctionnelle("Mon exception fonctionnelle", cause).setStatus(Status.FORBIDDEN);
+	}
+
+	@GET
+	@Path("exceptionTechnique")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void testExceptionTechnique() {
+		final IOException cause = new IOException("cause");
+		throw new RuntimeException("Mon exception technique", cause);
 	}
 
 }

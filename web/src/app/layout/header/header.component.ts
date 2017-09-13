@@ -16,9 +16,11 @@ export class HeaderComponent implements OnInit {
   private connecte: boolean;
   private userInfo: Claims;
   
-  private currentRouteSnapshot: ActivatedRouteSnapshot;
+  private currentRoute: any;
 
-  constructor(private router: Router, private currentRouteOnInit: ActivatedRoute, private title: Title, private authentificationService: AuthentificationService) { }
+  constructor(private router: Router, private currentRouteOnInit: ActivatedRoute, private title: Title, private authentificationService: AuthentificationService) {
+    this.currentRoute = this.currentRouteOnInit;
+  }
   
   ngOnInit() {
     let userInfo: any = this.authentificationService.getUserInfo();
@@ -28,34 +30,35 @@ export class HeaderComponent implements OnInit {
       this.connecte = this.userInfo.identifiant != undefined;
     }
     
-    this.setTitleForRoute(this.currentRouteOnInit);
+    this.setTitle();
     
     this.router.events.subscribe(event => {
       if (event instanceof ResolveEnd) {
-        this.currentRouteSnapshot = event.state.root;
-        this.setTitleForRoute(this.currentRouteSnapshot);
+        this.currentRoute = event.state.root;
+        this.setTitle();
       }
     });
   }
   
   logout() {
     this.authentificationService.logout();
-    if (this.routeNeedLogin(this.currentRouteSnapshot)) {
+    if (this.routeNeedLogin()) {
       window.location.href = '/';
     } else {
       window.location.reload();
     }
   }
   
-  private setTitleForRoute(route: any) {
+  private setTitle() {
+    let route: any = this.currentRoute;
     while (route && route.firstChild) {
       route = route.firstChild;
     }
-    let dataTitle: string = this.readDataTitleFromRoute(route);
+    let dataTitle: string = this.readDataFromRoute(route, 'title');
     while (!dataTitle && route) {
       route = route.parent;
       if (route) {
-        dataTitle = this.readDataTitleFromRoute(route);
+        dataTitle = this.readDataFromRoute(route, 'title');
       }
     }
     if (dataTitle) {
@@ -65,27 +68,29 @@ export class HeaderComponent implements OnInit {
     }
   }
   
-  private readDataTitleFromRoute(route: any) {
+  private readDataFromRoute(route: any, key: string) {
     if (route.data) {
-      if (route.data.title) {
-        return route.data.title;
+      if (route.data[key]) {
+        return route.data[key];
       }
       if (route.data.value) {
-        return route.data.value.title;
+        return route.data.value[key];
       }
     }
     return undefined;
   }
   
-  private routeNeedLogin(route: ActivatedRouteSnapshot): boolean {
+  private routeNeedLogin(): boolean {
+    let route: any = this.currentRoute;
     while (route && route.firstChild) {
       route = route.firstChild;
     }
-    let dataLogin: boolean = route.data.login ? route.data.login : false;
+    
+    let dataLogin: boolean = this.readDataFromRoute(route, 'login');
     while (!dataLogin && route) {
       route = route.parent;
       if (route) {
-        dataLogin = route.data.login ? route.data.login : false;
+        dataLogin = this.readDataFromRoute(route, 'login');
       }
     }
     return dataLogin;

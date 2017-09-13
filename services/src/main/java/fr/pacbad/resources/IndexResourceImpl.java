@@ -1,6 +1,5 @@
 package fr.pacbad.resources;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -10,27 +9,22 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import fr.pacbad.Application;
-import fr.pacbad.logger.PacbadLogger;
 
 @Path("/")
 public class IndexResourceImpl {
 
-	private static final PacbadLogger LOGGER = PacbadLogger.getLogger(IndexResourceImpl.class);
+	// private static final PacbadLogger LOGGER =
+	// PacbadLogger.getLogger(IndexResourceImpl.class);
 
-	private static final String version = chargerVersion();
+	private static final Properties buildProps = chargerBuildProps();
 
-	private static String chargerVersion() {
+	private static Properties chargerBuildProps() {
 		final InputStream is = IndexResourceImpl.class.getResourceAsStream("/build-info.properties");
 		if (is != null) {
 			final Properties props = new Properties();
-			try {
-				props.load(is);
-				return props.getProperty("build.projectVersion");
-			} catch (final IOException e) {
-				LOGGER.warning("Impossible de charger la version : " + e.toString());
-			}
+			return props;
 		}
-		return "???";
+		return new Properties();
 	}
 
 	@GET
@@ -43,7 +37,14 @@ public class IndexResourceImpl {
 	@Path("version")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getVersion() {
-		return version;
+		return buildProps.getProperty("build.projectVersion", "?");
+	}
+
+	@GET
+	@Path("buildDate")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getBuildDate() {
+		return buildProps.getProperty("build.timestamp", "?");
 	}
 
 	@GET

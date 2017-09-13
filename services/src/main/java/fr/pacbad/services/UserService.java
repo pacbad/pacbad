@@ -1,5 +1,6 @@
 package fr.pacbad.services;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import java.security.MessageDigest;
@@ -8,11 +9,14 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.inject.Inject;
+import javax.ws.rs.core.Response.Status;
 
 import fr.pacbad.auth.KeyGenerator;
 import fr.pacbad.dao.SimpleDao;
 import fr.pacbad.dao.UserDao;
 import fr.pacbad.entities.User;
+import fr.pacbad.entities.ffbad.WSJoueurDetail;
+import fr.pacbad.exception.ExceptionFonctionnelle;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -25,30 +29,70 @@ public class UserService extends SimpleService<User> {
 	@Inject
 	private KeyGenerator keyGenerator;
 
+	@Inject
+	private PoonaService poonaService;
+
 	@Override
 	protected SimpleDao<User> createDao() {
 		return new UserDao();
 	}
 
-	public void authenticate(final String login, final String password) throws Exception {
+	public void authenticate(final String login, final String password) throws ExceptionFonctionnelle {
 		final User u = getByIdentifiant(login);
 		final String hash = hash(password);
 		if (u != null && hash.equals(u.getHash())) {
 			return;
 		}
-		throw new Exception("Impossible de se connecter : utilisateur ou mot de passe incorrect");
+		throw new ExceptionFonctionnelle("Impossible de se connecter : utilisateur ou mot de passe incorrect")
+				.setStatus(Status.UNAUTHORIZED);
 	}
 
-	public void register(final User user) throws Exception {
+	public void register(final User user) throws ExceptionFonctionnelle, IOException {
 		// Règles de gestion :
 		// Vérifier que le login n'est pas déjà utilisé
-		final User userAvecMemeLogin = getByIdentifiant(user.getIdentifiant());
-		if (userAvecMemeLogin != null) {
-			throw new Exception("Identifiant déjà utilisé : " + userAvecMemeLogin.getIdentifiant());
+		if (user.getIdentifiant() == null || user.getIdentifiant().isEmpty()) {
+			throw new ExceptionFonctionnelle("Identifiant inconnu");
+		}
+		if (user.getDateNaissance() == null) {
+			throw new ExceptionFonctionnelle("Date de naissance inconnue");
 		}
 
-		// TODO Vérifier auprès de la fédération que la licence est valide avec la date
-		// de naissance saisie
+		final User userAvecMemeLogin = getByIdentifiant(user.getIdentifiant());
+		if (userAvecMemeLogin != null) {
+			throw new ExceptionFonctionnelle("Identifiant déjà utilisé : " + userAvecMemeLogin.getIdentifiant());
+		}
+
+		final User userAvecMemeLicence = getByLicence(user.getLicence());
+		if (userAvecMemeLicence != null) {
+			throw new ExceptionFonctionnelle(
+					"Un utilisateur avec cette licence existe déjà : " + userAvecMemeLicence.getIdentifiant());
+		}
+
+		final Long licence = user.getLicence();
+		if (licence == null || licence <= 0) {
+			throw new ExceptionFonctionnelle("Licence invalide : " + licence);
+		}
+		// Récupération du joueur dans Poona (à partir de sa licence)
+		try {
+			final WSJoueurDetail joueurPoona = poonaService.getByLicence(String.valueOf(user.getLicence()));
+			if (joueurPoona == null || joueurPoona.getInformation() == null) {
+				throw new ExceptionFonctionnelle(
+						"Impossible de récupérer les informations depuis Poona pour la licence " + user.getLicence()
+								+ ". Merci de réessayer plus tard.");
+			}
+			// Vérifier que la licence est valide avec la date de naissance saisie
+			if (joueurPoona.getInformation().getDateNaissance() == null) {
+				throw new ExceptionFonctionnelle("Date de naissance inconnue dans Poona");
+			}
+			if (!joueurPoona.getInformation().getDateNaissance().equals(user.getDateNaissance())) {
+				throw new ExceptionFonctionnelle("Date de naissance incorrecte : " + user.getDateNaissance());
+			}
+
+			user.setNom(joueurPoona.getInformation().getNom());
+			user.setPrenom(joueurPoona.getInformation().getPrenom());
+		} catch (final IOException e) {
+			throw new IOException("Connexion à Poona impossible", e);
+		}
 
 		// Enregistrement de l'utilisateur en base
 		user.setHash(hash(user.getPassword()));
@@ -57,6 +101,10 @@ public class UserService extends SimpleService<User> {
 
 	public User getByIdentifiant(final String identifiant) {
 		return getDao().getByColumn("identifiant", identifiant);
+	}
+
+	public User getByLicence(final Long licence) {
+		return getDao().getByColumn("licence", licence);
 	}
 
 	public String hash(final String password) {

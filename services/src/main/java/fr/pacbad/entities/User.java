@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity(name = "User")
 public class User implements SimpleEntity {
 
@@ -40,6 +42,7 @@ public class User implements SimpleEntity {
 
 	private String ancienPassword;
 	private String password;
+	@JsonFormat(pattern = "yyyy-MM-dd", locale = "fr_FR", timezone = "Europe/Paris")
 	private Date dateNaissance;
 
 	@Override
