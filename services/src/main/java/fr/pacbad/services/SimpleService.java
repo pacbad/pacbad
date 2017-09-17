@@ -43,4 +43,16 @@ public abstract class SimpleService<T extends SimpleEntity> {
 		return getDao().getAll();
 	}
 
+	protected T detach(final T e) {
+		getDao().detach(e);
+		return e;
+	}
+
+	protected List<T> detach(final List<T> list) {
+		for (final T e : list) {
+			detach(e);
+		}
+		return list;
+	}
+
 }

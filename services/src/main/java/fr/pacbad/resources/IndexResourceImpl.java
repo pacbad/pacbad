@@ -8,8 +8,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import fr.pacbad.Application;
-
 @Path("/")
 public class IndexResourceImpl {
 
@@ -45,13 +43,6 @@ public class IndexResourceImpl {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getBuildDate() {
 		return buildProps.getProperty("build.timestamp", "?");
-	}
-
-	@GET
-	@Path("environnement")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String getEnvironnement() {
-		return Application.getEnvironnement();
 	}
 
 }

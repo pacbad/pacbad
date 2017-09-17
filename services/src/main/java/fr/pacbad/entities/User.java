@@ -38,6 +38,9 @@ public class User implements SimpleEntity {
 	@Column(name = "prenom")
 	private String prenom;
 
+	@Column(name = "role")
+	private String role;
+
 	/* Champs non stockés en base, mais nécessaire pour dialoguer avec le client */
 
 	private String ancienPassword;
@@ -100,6 +103,14 @@ public class User implements SimpleEntity {
 
 	public void setPrenom(final String prenom) {
 		this.prenom = prenom;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(final String role) {
+		this.role = role;
 	}
 
 	public String getPassword() {

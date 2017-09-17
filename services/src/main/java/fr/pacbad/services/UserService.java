@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response.Status;
@@ -16,6 +17,7 @@ import fr.pacbad.dao.SimpleDao;
 import fr.pacbad.dao.UserDao;
 import fr.pacbad.entities.User;
 import fr.pacbad.entities.ffbad.WSJoueurDetail;
+import fr.pacbad.entities.ref.RoleUtilisateurEnum;
 import fr.pacbad.exception.ExceptionFonctionnelle;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -94,17 +96,32 @@ public class UserService extends SimpleService<User> {
 			throw new IOException("Connexion à Poona impossible", e);
 		}
 
-		// Enregistrement de l'utilisateur en base
+		// Hash du mot de passe
 		user.setHash(hash(user.getPassword()));
+
+		// TODO Mettre à jour le rôle de l'utilisateur en fonction des informations du
+		// club récupérées dans Poona (pour savoir s'il est responsable ou joueur
+		// simple)
+		user.setRole(RoleUtilisateurEnum.JOUEUR.getNom());
+
+		// Enregistrement de l'utilisateur en base
 		create(user);
 	}
 
 	public User getByIdentifiant(final String identifiant) {
-		return getDao().getByColumn("identifiant", identifiant);
+		User user = getDao().getByColumn("identifiant", identifiant);
+		if (user != null) {
+			user = detach(user);
+		}
+		return user;
 	}
 
 	public User getByLicence(final Long licence) {
-		return getDao().getByColumn("licence", licence);
+		User user = getDao().getByColumn("licence", licence);
+		if (user != null) {
+			user = detach(user);
+		}
+		return user;
 	}
 
 	public String hash(final String password) {
@@ -146,6 +163,7 @@ public class UserService extends SimpleService<User> {
 			claims.getBody().put("nom", u.getNom());
 			claims.getBody().put("licence", u.getLicence());
 			claims.getBody().put("mail", u.getMail());
+			claims.getBody().put("role", u.getRole());
 		}
 
 		return claims;
@@ -160,6 +178,38 @@ public class UserService extends SimpleService<User> {
 		// mise à jour du mail
 		u.setMail(user.getMail());
 		return update(u);
+	}
+
+	public List<User> getAdministrateurs() {
+		return getDao().getListByColumn("role", RoleUtilisateurEnum.ADMIN.getNom());
+	}
+
+	public void deleteAdministrateur(final String identifiantAdmin) throws ExceptionFonctionnelle {
+		final User u = getByIdentifiant(identifiantAdmin);
+		if (u == null) {
+			throw new ExceptionFonctionnelle("Utilisateur inconnu : " + identifiantAdmin);
+		}
+		if (RoleUtilisateurEnum.get(u.getRole()) != RoleUtilisateurEnum.ADMIN) {
+			throw new ExceptionFonctionnelle("L'utilisateur n'est pas un administrateur");
+		}
+
+		// TODO vérifier si l'utilisateur a un rôle de responsable de club
+
+		u.setRole(RoleUtilisateurEnum.JOUEUR.getNom());
+		update(u);
+	}
+
+	public void addAdministrateur(final String identifiantAdmin) throws ExceptionFonctionnelle {
+		final User u = getByIdentifiant(identifiantAdmin);
+		if (u == null) {
+			throw new ExceptionFonctionnelle("Utilisateur inconnu : " + identifiantAdmin);
+		}
+		if (RoleUtilisateurEnum.get(u.getRole()) == RoleUtilisateurEnum.ADMIN) {
+			throw new ExceptionFonctionnelle("L'utilisateur est déjà un administrateur");
+		}
+
+		u.setRole(RoleUtilisateurEnum.ADMIN.getNom());
+		update(u);
 	}
 
 }

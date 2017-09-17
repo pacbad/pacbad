@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       .subscribe(
         ok => {
           let redirect: string = '/';
-          if (this.redirectUri) {
+          if (this.redirectUri && this.redirectUri.indexOf('/login') < 0) {
             redirect = this.redirectUri;
           }
           window.location.href = redirect;

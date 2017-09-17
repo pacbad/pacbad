@@ -53,7 +53,6 @@ public class TransactionFilter implements Filter {
 
 	@Override
 	public void init(final FilterConfig filterConfig) throws ServletException {
-		LOGGER.info("Démarrage de l'application en mode " + Application.getEnvironnement());
 		emf = Persistence.createEntityManagerFactory("pacbad-persistence-" + Application.getEnvironnement());
 	}
 

@@ -16,6 +16,7 @@ import java.text.NumberFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
@@ -29,9 +30,10 @@ import fr.pacbad.services.ffbad.FfbadJsonParser;
 
 public class PoonaService {
 
+	@Inject
+	private ParametreService parametre;
+
 	private static final String URL = "https://ws.ffbad.com/";
-	private static final String LOGIN = "android";
-	private static final String PASSWORD = "android4ffbad";
 	private static final String CERTIFICATE_NAME = "/Gandi Standard SSL CA 2.crt";
 
 	private static final PacbadLogger LOGGER = PacbadLogger.getLogger(CorsFilter.class);
@@ -46,7 +48,7 @@ public class PoonaService {
 		return result;
 	}
 
-	private <T> T call(final String functionName, final Map<String, Object> params, final Class<T> typeAttendu)
+	protected <T> T call(final String functionName, final Map<String, Object> params, final Class<T> typeAttendu)
 			throws IOException {
 
 		String url = URL;
@@ -55,8 +57,8 @@ public class PoonaService {
 		query.function = functionName;
 
 		final AuthParam auth = new AuthParam();
-		auth.login = LOGIN;
-		auth.password = PASSWORD;
+		auth.login = parametre.getString(ParametreService.KEY_POONA_LOGIN);
+		auth.password = parametre.getString(ParametreService.KEY_POONA_PASSWORD);
 
 		// url += "rest/?query=" + query.toString();
 		// url += "&auth=" + auth.toString();

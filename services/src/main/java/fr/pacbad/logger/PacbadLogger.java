@@ -3,9 +3,14 @@ package fr.pacbad.logger;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.pacbad.Application;
+import javax.inject.Inject;
+
+import fr.pacbad.services.ParametreService;
 
 public class PacbadLogger {
+
+	@Inject
+	private ParametreService parametre;
 
 	private final Class<?> clazz;
 
@@ -20,11 +25,7 @@ public class PacbadLogger {
 		final PacbadLogger logger = new PacbadLogger(clazz);
 
 		// Configuration
-		switch (Application.getEnvironnement()) {
-		case Application.ENVIRONNEMENT_DEV:
-		default:
-			logger.handlers.add(new ConsoleWriter());
-		}
+		logger.handlers.add(new ConsoleWriter());
 
 		return logger;
 	}
@@ -64,8 +65,18 @@ public class PacbadLogger {
 		entry.message = message;
 		entry.exception = t;
 		entry.loggerClass = clazz;
-		for (final LogHandler handler : handlers) {
-			handler.log(entry);
+		final Level levelMin;
+		if (parametre == null) {
+			// Dans le cas des tests, le service des paramètres n'est pas injecté
+			levelMin = Level.DEBUG;
+		} else {
+			levelMin = Level.valueOf(parametre.getString(ParametreService.KEY_LOGGER_LEVEL));
+
+		}
+		if (levelMin.ordinal() <= level.ordinal()) {
+			for (final LogHandler handler : handlers) {
+				handler.log(entry);
+			}
 		}
 	}
 
