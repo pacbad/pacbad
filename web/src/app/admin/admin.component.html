@@ -27,11 +27,10 @@
                 </tr>
               </table>
               
-              <div *ngIf="newAdmin">
+              <div *ngIf="newAdmin" style="padding-bottom: 10px;">
                   <input type="text" name="identifiant" [(ngModel)]="newAdmin.identifiant" />
                   <button (click)="validateAddAdmin()"><span class="glyphicon glyphicon-ok"></span></button>
                   <button (click)="cancelAddAdmin()"><span class="glyphicon glyphicon-remove"></span></button>
-                  <br />
               </div>
               
               <button (click)="startAddAdmin()"><span class="glyphicon glyphicon-plus"></span> Ajouter un administrateur</button>
@@ -65,7 +64,7 @@
                 </tr>
               </table>
               
-              <button (click)="clearCache()"><span class="glyphicon glyphicon-refresh"></span> Vider le cache</button>
+              <button (click)="clearCache()"><span class="glyphicon glyphicon-refresh"></span> Rafraichir le cache des paramètres</button>
       
             </fieldset>
         </form>
