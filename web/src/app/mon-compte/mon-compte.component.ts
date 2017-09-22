@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
 
 import { User } from '../models/user.model';
 import { AuthentificationService } from '../services/authentification.service';

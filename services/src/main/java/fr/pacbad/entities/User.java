@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -40,6 +42,10 @@ public class User implements SimpleEntity {
 
 	@Column(name = "role")
 	private String role;
+
+	@Column(name = "dateCreation")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dateCreation;
 
 	/* Champs non stockés en base, mais nécessaire pour dialoguer avec le client */
 
@@ -111,6 +117,14 @@ public class User implements SimpleEntity {
 
 	public void setRole(final String role) {
 		this.role = role;
+	}
+
+	public Date getDateCreation() {
+		return dateCreation;
+	}
+
+	public void setDateCreation(final Date dateCreation) {
+		this.dateCreation = dateCreation;
 	}
 
 	public String getPassword() {

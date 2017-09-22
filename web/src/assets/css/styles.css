@@ -180,3 +180,8 @@ footer .footer-right {
 .chargement-mask svg {
   position: fixed;
 }
+
+.compte-cree-le {
+  text-align: right;
+  font-style: italic;
+}

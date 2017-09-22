@@ -7,6 +7,7 @@
   <div class="row content">
     <div class="col-xs-16 col-sm-6 col-sm-offset-3">
         <h2>Bonjour {{user.prenom}}</h2>
+        <p class="compte-cree-le">Compté créé le {{user.dateCreation | date:'dd/MM/y'}}</p>
         <form name="form" (ngSubmit)="f.form.valid && update()" #f="ngForm" novalidate class="form-horizontal">
             <fieldset>
               <legend>Informations du compte</legend>

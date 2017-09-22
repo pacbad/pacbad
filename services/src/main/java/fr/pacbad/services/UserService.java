@@ -99,6 +99,8 @@ public class UserService extends SimpleService<User> {
 		// Hash du mot de passe
 		user.setHash(hash(user.getPassword()));
 
+		user.setDateCreation(new Date());
+
 		// TODO Mettre à jour le rôle de l'utilisateur en fonction des informations du
 		// club récupérées dans Poona (pour savoir s'il est responsable ou joueur
 		// simple)
@@ -164,6 +166,7 @@ public class UserService extends SimpleService<User> {
 			claims.getBody().put("licence", u.getLicence());
 			claims.getBody().put("mail", u.getMail());
 			claims.getBody().put("role", u.getRole());
+			claims.getBody().put("dateCreation", u.getDateCreation());
 		}
 
 		return claims;
