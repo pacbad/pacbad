@@ -42,7 +42,9 @@ matrix:
         - cd web
         - npm install -g @angular/cli
         - npm install
-        - npm run-script build
+        
+      after_success:
+        - npm run build
 
 notifications:
   email:
