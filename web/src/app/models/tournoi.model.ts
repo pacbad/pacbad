@@ -7,4 +7,15 @@ export class Tournoi {
   dateDebut: Date;
   dateFin: Date;
 
+  lieu: string;
+  departement: string;
+  region: string;
+
+  nbJoueursMax: number;
+  nbTerrains: number;
+
+  identifiantPoona: string;
+
+  decoupageParCote: boolean;
+
 }

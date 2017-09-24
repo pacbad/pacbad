@@ -24,6 +24,7 @@ import { MonCompteComponent } from './mon-compte/mon-compte.component';
 import { ErreurComponent } from './erreur/erreur.component';
 
 import {TournoiService} from './tournois/tournoi.service';
+import { TournoiComponent } from './tournois/tournoi/tournoi.component';
 
 const appRoutes: Routes = [
   { path: '', component: LayoutCommunComponent,
@@ -36,6 +37,7 @@ const appRoutes: Routes = [
         { path: 'compte', component: MonCompteComponent, data: { title: 'Mon compte', login: true } },
       ]
   },
+  { path: 'tournoi/:id', component: TournoiComponent },
   { path: 'login', component: LoginComponent },
   { path: 'erreur', component: ErreurComponent },
   { path: '**', component: PageNotFoundComponent },
@@ -53,6 +55,7 @@ const appRoutes: Routes = [
     RegisterComponent,
     MonCompteComponent,
     ErreurComponent,
+    TournoiComponent,
   ],
   imports: [
     BrowserModule,

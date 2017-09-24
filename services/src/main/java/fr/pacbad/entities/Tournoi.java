@@ -38,6 +38,27 @@ public class Tournoi implements SimpleEntity {
 	@Temporal(TemporalType.DATE)
 	private Date dateFin;
 
+	@Column(name = "lieu")
+	private String lieu;
+
+	@Column(name = "departement")
+	private String departement;
+
+	@Column(name = "region")
+	private String region;
+
+	@Column(name = "nb_joueurs_max")
+	private int nbJoueursMax;
+
+	@Column(name = "nb_terrains")
+	private int nbTerrains;
+
+	@Column(name = "identifiant_poona")
+	private String identifiantPoona;
+
+	@Column(name = "decoupage_cote")
+	private Boolean decoupageParCote;
+
 	@Override
 	public Long getId() {
 		return id;
@@ -69,6 +90,62 @@ public class Tournoi implements SimpleEntity {
 
 	public void setDateFin(final Date dateFin) {
 		this.dateFin = dateFin;
+	}
+
+	public String getLieu() {
+		return lieu;
+	}
+
+	public void setLieu(final String lieu) {
+		this.lieu = lieu;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(final String region) {
+		this.region = region;
+	}
+
+	public int getNbJoueursMax() {
+		return nbJoueursMax;
+	}
+
+	public void setNbJoueursMax(final int nbJoueursMax) {
+		this.nbJoueursMax = nbJoueursMax;
+	}
+
+	public int getNbTerrains() {
+		return nbTerrains;
+	}
+
+	public void setNbTerrains(final int nbTerrains) {
+		this.nbTerrains = nbTerrains;
+	}
+
+	public String getIdentifiantPoona() {
+		return identifiantPoona;
+	}
+
+	public void setIdentifiantPoona(final String identifiantPoona) {
+		this.identifiantPoona = identifiantPoona;
+	}
+
+	public Boolean getDecoupageParCote() {
+		return decoupageParCote;
+	}
+
+	public void setDecoupageParCote(final Boolean decoupageParCote) {
+		this.decoupageParCote = decoupageParCote;
+	}
+
+	public String getDepartement() {
+		return departement;
+	}
+
+	public void setDepartement(final String departement) {
+		this.departement = departement;
 	}
 
 }

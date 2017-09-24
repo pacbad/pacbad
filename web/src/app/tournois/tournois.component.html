@@ -12,12 +12,18 @@
           <th>Nom</th>
           <th>Date début</th>
           <th>Date fin</th>
+          <th>Ville</th>
+          <th>Département</th>
+          <th>Région</th>
         </tr>
       
-        <tr *ngFor="let tournoi of tournois">
+        <tr *ngFor="let tournoi of tournois" [routerLink]="['/tournoi', tournoi.id]">
           <td>{{tournoi.nom}}</td>
           <td>{{tournoi.dateDebut|date:"dd/MM/yyyy"}}</td>
           <td>{{tournoi.dateFin|date:"dd/MM/yyyy"}}</td>
+          <td>{{tournoi.lieu}}</td>
+          <td>{{tournoi.departement}}</td>
+          <td>{{tournoi.region}}</td>
         </tr>
       </table>
         
