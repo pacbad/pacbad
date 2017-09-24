@@ -26,6 +26,7 @@
             </button>
             <ul class="dropdown-menu">
               <li><a routerLink="/compte">Mon compte</a></li>
+              <li *ngIf="userInfo?.role === 'administrateur'"><a routerLink="/admin">Administration</a></li>
               <li role="separator" class="divider"></li>
               <li><a (click)="logout()">Me déconnecter</a></li>
             </ul>

@@ -21,6 +21,10 @@ public class Application extends ResourceConfig {
 		setApplicationName("PacBad");
 
 		register(new ApplicationBinder());
+		register(new ExceptionFonctionnelleMapper());
+		register(new WebApplicationExceptionMapper());
+		register(new ExceptionTechniqueMapper());
+
 		packages("fr.pacbad.resources;fr.pacbad.filter");
 	}
 

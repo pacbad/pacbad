@@ -1,11 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+import { AuthentificationService } from '../services/authentification.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit{
 
-  constructor() { }
+  currentUserLogin: string;
+  
+  constructor(private authentificationService: AuthentificationService) { }
+  
+  public ngOnInit() {
+    if (this.authentificationService.getUserInfo()) {
+      this.currentUserLogin = this.authentificationService.getUserInfo().identifiant;
+    }
+  }
 
 }

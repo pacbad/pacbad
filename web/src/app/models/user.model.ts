@@ -16,6 +16,8 @@ export class User {
   mail: string;
   nom: string;
   prenom: string;
+  
+  dateCreation: Date;
 
 }
 
@@ -26,5 +28,7 @@ export class Claims {
   mail: string;
   nom: string;
   prenom: string;
+  
+  dateCreation: Date;
 
 }

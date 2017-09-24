@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule }   from '@angular/forms';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatAutocompleteModule, MatInputModule} from '@angular/material';
 
 import { AppComponent } from './app.component';
 
@@ -25,6 +27,9 @@ import { ErreurComponent } from './erreur/erreur.component';
 
 import {TournoiService} from './tournois/tournoi.service';
 import { TournoiComponent } from './tournois/tournoi/tournoi.component';
+import { AdminComponent } from './admin/admin.component';
+import { AdminService } from './admin/admin.service';
+import { AccesInterditComponent } from './acces-interdit/acces-interdit.component';
 
 const appRoutes: Routes = [
   { path: '', component: LayoutCommunComponent,
@@ -35,11 +40,13 @@ const appRoutes: Routes = [
         { path: 'a-propos', component: AProposComponent, data: { title: 'A propos' } },
         { path: 'register', component: RegisterComponent, data: { title: 'Créer un compte' } },
         { path: 'compte', component: MonCompteComponent, data: { title: 'Mon compte', login: true } },
+        { path: 'admin', component: AdminComponent, data: { title: 'Administration', login: true } },
       ]
   },
   { path: 'tournoi/:id', component: TournoiComponent },
   { path: 'login', component: LoginComponent },
   { path: 'erreur', component: ErreurComponent },
+  { path: 'acces-interdit', component: AccesInterditComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
 
@@ -56,11 +63,16 @@ const appRoutes: Routes = [
     MonCompteComponent,
     ErreurComponent,
     TournoiComponent,
+    AdminComponent,
+    AccesInterditComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    BrowserAnimationsModule,
+    MatInputModule,
+    MatAutocompleteModule,
     RouterModule.forRoot(appRoutes),
     ServicesModule,
     LayoutModule,
@@ -68,7 +80,8 @@ const appRoutes: Routes = [
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true },
-    TournoiService
+    TournoiService,
+    AdminService
   ],
   bootstrap: [AppComponent]
 })

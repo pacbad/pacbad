@@ -4,10 +4,30 @@
           <strong>P</strong>lateforme d'<strong>A</strong>dministration de <strong>C</strong>ompétitions de <strong>Bad</strong>minton
         </blockquote>
 
-        <div>
+        <div *ngIf="!currentUserLogin">
           <h3>Inscrivez-vous</h3>
           <img src="assets/img/ghost_1.png" class="image-ghost" />
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          <p>
+            <a routerLink="/register">Créez votre compte</a> pour bénéficier de toutes les fonctionnalités du site.
+          </p>
+          <p>
+            Vous avez déjà un compte ? <a routerLink="/login">Connectez-vous !</a>
+          </p>
+          <p>
+            Consultez la <a routerLink="/tournois">liste des tournois</a> et choisissez votre prochaine compétition.
+          </p>
+          <hr />
+        </div>
+
+        <div *ngIf="currentUserLogin">
+          <h3>Inscrivez-vous</h3>
+          <img src="assets/img/ghost_1.png" class="image-ghost" />
+          <p>
+            <a routerLink="/compte">Accédez à votre compte</a> pour modifier vos informations.
+          </p>
+          <p>
+            Consultez la <a routerLink="/tournois">liste des tournois</a> et choisissez votre prochaine compétition.
+          </p>
           <hr />
         </div>
 

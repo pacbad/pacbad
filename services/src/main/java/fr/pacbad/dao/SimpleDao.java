@@ -1,10 +1,15 @@
 package fr.pacbad.dao;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Cacheable;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
+
+import org.hibernate.jpa.QueryHints;
 
 import fr.pacbad.entities.SimpleEntity;
 import fr.pacbad.filter.TransactionFilter;
@@ -17,12 +22,12 @@ public abstract class SimpleDao<T extends SimpleEntity> {
 
 	public T create(final T e) {
 		getEntityManager().persist(e);
-		return detach(e);
+		return e;
 	}
 
 	public T update(final T e) {
 		getEntityManager().merge(e);
-		return detach(e);
+		return e;
 	}
 
 	public void delete(final T e) {
@@ -30,24 +35,40 @@ public abstract class SimpleDao<T extends SimpleEntity> {
 	}
 
 	public T getById(final Long id) {
-		return detach(getEntityManager().find(getEntityType(), id));
+		return getEntityManager().find(getEntityType(), id);
 	}
 
 	@SuppressWarnings("unchecked")
 	public T getByColumn(final String columnName, final Object value) {
 		try {
-			return detach((T) getEntityManager().createQuery(
+			final Query query = getEntityManager().createQuery(
 					"Select e from " + getEntityType().getSimpleName() + " e where e." + columnName + " = :value")
-					.setParameter("value", value).getSingleResult());
+					.setParameter("value", value);
+			cacheQueryIfNeeded(query);
+			return (T) query.getSingleResult();
 		} catch (final NoResultException e) {
 			return null;
 		}
 	}
 
 	@SuppressWarnings("unchecked")
+	public List<T> getListByColumn(final String columnName, final Object value) {
+		try {
+			final Query query = getEntityManager().createQuery(
+					"Select e from " + getEntityType().getSimpleName() + " e where e." + columnName + " = :value")
+					.setParameter("value", value);
+			cacheQueryIfNeeded(query);
+			return query.getResultList();
+		} catch (final NoResultException e) {
+			return new ArrayList<>();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	public List<T> getAll() {
-		return detach(getEntityManager().createQuery("Select e from " + getEntityType().getSimpleName() + " e")
-				.getResultList());
+		final Query query = getEntityManager().createQuery("Select e from " + getEntityType().getSimpleName() + " e");
+		cacheQueryIfNeeded(query);
+		return query.getResultList();
 	}
 
 	protected Class<T> getEntityType() {
@@ -57,12 +78,19 @@ public abstract class SimpleDao<T extends SimpleEntity> {
 		return persistentClass;
 	}
 
-	protected T detach(final T e) {
+	protected void cacheQueryIfNeeded(final Query query) {
+		final Cacheable cacheableAnnotation = getEntityType().getAnnotation(Cacheable.class);
+		if (cacheableAnnotation != null && cacheableAnnotation.value()) {
+			query.setHint(QueryHints.HINT_CACHEABLE, true);
+		}
+	}
+
+	public T detach(final T e) {
 		getEntityManager().detach(e);
 		return e;
 	}
 
-	protected List<T> detach(final List<T> list) {
+	public List<T> detach(final List<T> list) {
 		for (final T e : list) {
 			detach(e);
 		}

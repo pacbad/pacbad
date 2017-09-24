@@ -20,7 +20,7 @@ public abstract class AbstractServiceTest<T extends SimpleService<?>> extends Pa
 
 	protected abstract T createService();
 
-	private TransactionFilter transactionFilter;
+	protected TransactionFilter transactionFilter;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws ServletException {

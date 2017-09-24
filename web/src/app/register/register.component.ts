@@ -49,7 +49,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
           window.location.href = '/';
         },
         err => {
-          this.error = JSON.stringify(err);
+          this.error = "Impossible de créer le compte : " + err.error.message;
         });
   }
 

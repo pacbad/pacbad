@@ -1,5 +1,7 @@
 package fr.pacbad.logger;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -8,6 +10,7 @@ public class LogEntry {
 
 	Level level;
 	String message;
+	Throwable exception;
 	long timestamp;
 	Class<?> loggerClass;
 
@@ -18,6 +21,12 @@ public class LogEntry {
 		str += sdf.format(new Date(timestamp));
 		str += " [" + level + "] [" + loggerClass.getSimpleName() + "] ";
 		str += message;
+		if (exception != null) {
+			str += "\n";
+			final StringWriter stacktrace = new StringWriter();
+			exception.printStackTrace(new PrintWriter(stacktrace));
+			str += stacktrace.toString();
+		}
 		return str;
 	}
 }

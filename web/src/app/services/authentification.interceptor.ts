@@ -32,6 +32,11 @@ export class AuthHttpInterceptor implements HttpInterceptor {
               window.location.href = '/login?redirect=' + window.location.href;
               handled = true;
             }
+            if (err.status === 403) {
+               // Accès interdit
+              window.location.href = '/acces-interdit';
+              handled = true;
+            }
           }
           return new Observable(observer => {
             if (!handled) {

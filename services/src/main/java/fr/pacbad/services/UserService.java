@@ -1,18 +1,25 @@
 package fr.pacbad.services;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
+import javax.ws.rs.core.Response.Status;
 
 import fr.pacbad.auth.KeyGenerator;
 import fr.pacbad.dao.SimpleDao;
 import fr.pacbad.dao.UserDao;
 import fr.pacbad.entities.User;
+import fr.pacbad.entities.ffbad.WSDetailInstance;
+import fr.pacbad.entities.ffbad.WSJoueurDetail;
+import fr.pacbad.entities.ref.RoleUtilisateurEnum;
+import fr.pacbad.exception.ExceptionFonctionnelle;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -25,38 +32,103 @@ public class UserService extends SimpleService<User> {
 	@Inject
 	private KeyGenerator keyGenerator;
 
+	@Inject
+	private PoonaService poonaService;
+
 	@Override
 	protected SimpleDao<User> createDao() {
 		return new UserDao();
 	}
 
-	public void authenticate(final String login, final String password) throws Exception {
+	public void authenticate(final String login, final String password) throws ExceptionFonctionnelle {
 		final User u = getByIdentifiant(login);
 		final String hash = hash(password);
 		if (u != null && hash.equals(u.getHash())) {
 			return;
 		}
-		throw new Exception("Impossible de se connecter : utilisateur ou mot de passe incorrect");
+		throw new ExceptionFonctionnelle("Impossible de se connecter : utilisateur ou mot de passe incorrect")
+				.setStatus(Status.UNAUTHORIZED);
 	}
 
-	public void register(final User user) throws Exception {
+	public void register(final User user) throws ExceptionFonctionnelle, IOException {
 		// Règles de gestion :
 		// Vérifier que le login n'est pas déjà utilisé
-		final User userAvecMemeLogin = getByIdentifiant(user.getIdentifiant());
-		if (userAvecMemeLogin != null) {
-			throw new Exception("Identifiant déjà utilisé : " + userAvecMemeLogin.getIdentifiant());
+		if (user.getIdentifiant() == null || user.getIdentifiant().isEmpty()) {
+			throw new ExceptionFonctionnelle("Identifiant inconnu");
+		}
+		if (user.getDateNaissance() == null) {
+			throw new ExceptionFonctionnelle("Date de naissance inconnue");
 		}
 
-		// TODO Vérifier auprès de la fédération que la licence est valide avec la date
-		// de naissance saisie
+		final User userAvecMemeLogin = getByIdentifiant(user.getIdentifiant());
+		if (userAvecMemeLogin != null) {
+			throw new ExceptionFonctionnelle("Identifiant déjà utilisé : " + userAvecMemeLogin.getIdentifiant());
+		}
+
+		final User userAvecMemeLicence = getByLicence(user.getLicence());
+		if (userAvecMemeLicence != null) {
+			throw new ExceptionFonctionnelle(
+					"Un utilisateur avec cette licence existe déjà : " + userAvecMemeLicence.getIdentifiant());
+		}
+
+		final Long licence = user.getLicence();
+		if (licence == null || licence <= 0) {
+			throw new ExceptionFonctionnelle("Licence invalide : " + licence);
+		}
+		// Récupération du joueur dans Poona (à partir de sa licence)
+		try {
+			final WSJoueurDetail joueurPoona = poonaService.getJoueurByLicence(String.valueOf(user.getLicence()));
+			if (joueurPoona == null || joueurPoona.getInformation() == null) {
+				throw new ExceptionFonctionnelle(
+						"Impossible de récupérer les informations depuis Poona pour la licence " + user.getLicence()
+								+ ". Merci de réessayer plus tard.");
+			}
+			// Vérifier que la licence est valide avec la date de naissance saisie
+			if (joueurPoona.getInformation().getDateNaissance() == null) {
+				throw new ExceptionFonctionnelle("Date de naissance inconnue dans Poona");
+			}
+			if (!joueurPoona.getInformation().getDateNaissance().equals(user.getDateNaissance())) {
+				throw new ExceptionFonctionnelle("Date de naissance incorrecte : " + user.getDateNaissance());
+			}
+
+			user.setNom(joueurPoona.getInformation().getNom());
+			user.setPrenom(joueurPoona.getInformation().getPrenom());
+
+			final WSDetailInstance club = poonaService.getInstanceById(joueurPoona.getInformation().getClubId());
+
+			// TODO création du lien entre le joueur et le club
+		} catch (final IOException e) {
+			throw new IOException("Connexion à Poona impossible", e);
+		}
+
+		// Hash du mot de passe
+		user.setHash(hash(user.getPassword()));
+
+		user.setDateCreation(new Date());
+
+		// TODO Mettre à jour le rôle de l'utilisateur en fonction des informations du
+		// club récupérées dans Poona (pour savoir s'il est responsable ou joueur
+		// simple)
+		user.setRole(RoleUtilisateurEnum.JOUEUR.getNom());
 
 		// Enregistrement de l'utilisateur en base
-		user.setHash(hash(user.getPassword()));
 		create(user);
 	}
 
 	public User getByIdentifiant(final String identifiant) {
-		return getDao().getByColumn("identifiant", identifiant);
+		User user = getDao().getByColumn("identifiant", identifiant);
+		if (user != null) {
+			user = detach(user);
+		}
+		return user;
+	}
+
+	public User getByLicence(final Long licence) {
+		User user = getDao().getByColumn("licence", licence);
+		if (user != null) {
+			user = detach(user);
+		}
+		return user;
 	}
 
 	public String hash(final String password) {
@@ -98,6 +170,8 @@ public class UserService extends SimpleService<User> {
 			claims.getBody().put("nom", u.getNom());
 			claims.getBody().put("licence", u.getLicence());
 			claims.getBody().put("mail", u.getMail());
+			claims.getBody().put("role", u.getRole());
+			claims.getBody().put("dateCreation", u.getDateCreation());
 		}
 
 		return claims;
@@ -112,6 +186,38 @@ public class UserService extends SimpleService<User> {
 		// mise à jour du mail
 		u.setMail(user.getMail());
 		return update(u);
+	}
+
+	public List<User> getAdministrateurs() {
+		return getDao().getListByColumn("role", RoleUtilisateurEnum.ADMIN.getNom());
+	}
+
+	public void deleteAdministrateur(final String identifiantAdmin) throws ExceptionFonctionnelle {
+		final User u = getByIdentifiant(identifiantAdmin);
+		if (u == null) {
+			throw new ExceptionFonctionnelle("Utilisateur inconnu : " + identifiantAdmin);
+		}
+		if (RoleUtilisateurEnum.get(u.getRole()) != RoleUtilisateurEnum.ADMIN) {
+			throw new ExceptionFonctionnelle("L'utilisateur n'est pas un administrateur");
+		}
+
+		// TODO vérifier si l'utilisateur a un rôle de responsable de club
+
+		u.setRole(RoleUtilisateurEnum.JOUEUR.getNom());
+		update(u);
+	}
+
+	public void addAdministrateur(final String identifiantAdmin) throws ExceptionFonctionnelle {
+		final User u = getByIdentifiant(identifiantAdmin);
+		if (u == null) {
+			throw new ExceptionFonctionnelle("Utilisateur inconnu : " + identifiantAdmin);
+		}
+		if (RoleUtilisateurEnum.get(u.getRole()) == RoleUtilisateurEnum.ADMIN) {
+			throw new ExceptionFonctionnelle("L'utilisateur est déjà un administrateur");
+		}
+
+		u.setRole(RoleUtilisateurEnum.ADMIN.getNom());
+		update(u);
 	}
 
 }

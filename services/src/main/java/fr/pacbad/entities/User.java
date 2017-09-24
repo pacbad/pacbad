@@ -7,6 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity(name = "User")
 public class User implements SimpleEntity {
@@ -36,10 +40,18 @@ public class User implements SimpleEntity {
 	@Column(name = "prenom")
 	private String prenom;
 
+	@Column(name = "role")
+	private String role;
+
+	@Column(name = "dateCreation")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dateCreation;
+
 	/* Champs non stockés en base, mais nécessaire pour dialoguer avec le client */
 
 	private String ancienPassword;
 	private String password;
+	@JsonFormat(pattern = "yyyy-MM-dd", locale = "fr_FR", timezone = "Europe/Paris")
 	private Date dateNaissance;
 
 	@Override
@@ -97,6 +109,22 @@ public class User implements SimpleEntity {
 
 	public void setPrenom(final String prenom) {
 		this.prenom = prenom;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(final String role) {
+		this.role = role;
+	}
+
+	public Date getDateCreation() {
+		return dateCreation;
+	}
+
+	public void setDateCreation(final Date dateCreation) {
+		this.dateCreation = dateCreation;
 	}
 
 	public String getPassword() {

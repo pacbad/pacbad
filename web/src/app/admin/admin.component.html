@@ -1,0 +1,122 @@
+
+<chargement-ecran *ngIf="!ready"></chargement-ecran>
+
+<chargement-mask *ngIf="loading"></chargement-mask>
+
+<div class="container-fluid text-center" *ngIf="ready">
+  <div class="row content">
+    <div class="col-xs-16 col-sm-6 col-sm-offset-3">
+        <h2>Administration</h2>
+        <form>
+            <fieldset>
+              <legend>Liste des administrateurs</legend>
+              
+              <table class="table table-striped table-hover table-bordered">
+                <tr>
+                  <th>Identifiant</th>
+                  <th>Prénom</th>
+                  <th>Nom</th>
+                  <th>Supprimer</th>
+                </tr>
+              
+                <tr *ngFor="let administrateur of administrateurs">
+                  <td>{{administrateur.identifiant}}</td>
+                  <td>{{administrateur.prenom}}</td>
+                  <td>{{administrateur.nom}}</td>
+                  <td><button (click)="deleteAdministrateur(administrateur)" *ngIf="administrateur.identifiant !== currentUserLogin"><span class="glyphicon glyphicon-trash"></span></button></td>
+                </tr>
+              </table>
+              
+              <div *ngIf="newAdmin" style="padding-bottom: 10px;">
+                  <input type="text" name="identifiant" [(ngModel)]="newAdmin.identifiant" />
+                  <button (click)="validateAddAdmin()"><span class="glyphicon glyphicon-ok"></span></button>
+                  <button (click)="cancelAddAdmin()"><span class="glyphicon glyphicon-remove"></span></button>
+              </div>
+              
+              <button (click)="startAddAdmin()"><span class="glyphicon glyphicon-plus"></span> Ajouter un administrateur</button>
+            </fieldset>
+          </form>
+          <br />
+          <form>
+            <fieldset>
+              <legend>Paramètres</legend>
+              
+              <table class="table table-striped table-hover table-bordered">
+                <tr>
+                  <th>Clef</th>
+                  <th>Valeur</th>
+                  <th>Modifier</th>
+                </tr>
+              
+                <tr *ngFor="let parametre of parametres">
+                  <td>
+                    <span>{{parametre.clef}}</span>
+                  </td>
+                  <td>
+                    <span *ngIf="editingParametre !== parametre">{{parametre.valeur}}</span>
+                    <input *ngIf="editingParametre === parametre" type="text" name="valeur" [(ngModel)]="editingParametre.valeur" />
+                  </td>
+                  <td>
+                    <button (click)="editParametre(parametre)" *ngIf="!editingParametre"><span class="glyphicon glyphicon-pencil"></span></button>
+                    <button (click)="validateParametre()" *ngIf="editingParametre === parametre"><span class="glyphicon glyphicon-ok"></span></button>
+                    <button (click)="cancelParametre()" *ngIf="editingParametre === parametre"><span class="glyphicon glyphicon-remove"></span></button>
+                  </td>
+                </tr>
+              </table>
+              
+              <button (click)="clearCache()"><span class="glyphicon glyphicon-refresh"></span> Rafraichir le cache des paramètres</button>
+      
+            </fieldset>
+        </form>
+        <div class="form-group has-error" *ngIf="error">
+            <div class="help-block">{{error}}</div>
+        </div>
+        <div class="form-group has-success" *ngIf="information">
+            <div class="help-block">{{information}}</div>
+        </div>
+        <hr />
+        <h2>Demo parcours fédération</h2>
+        <div>
+          Fédération : {{federation?.nom}}
+        </div>
+        
+        <div class="form-group">
+          <md-form-field class="md-full-width">
+            <input type="text" mdInput placeholder="Ligue" [mdAutocomplete]="autoLigues" [(ngModel)]="txtLigue" width="100%"/>
+          </md-form-field>
+          <md-autocomplete #autoLigues>
+             <md-option *ngFor="let ligue of filterAutocomplete(ligues, txtLigue)" [value]="ligue.nom" (onSelectionChange)="onLigueSelected($event, ligue)">
+                {{ ligue.nom }}
+             </md-option>
+          </md-autocomplete>
+        </div>
+        
+        <div class="form-group">
+          <md-form-field class="md-full-width">
+            <input type="text" mdInput placeholder="Codep" [mdAutocomplete]="autoCodeps" [(ngModel)]="txtCodep"/>
+          </md-form-field>
+          <md-autocomplete #autoCodeps>
+             <md-option *ngFor="let codep of filterAutocomplete(codeps, txtCodep)" [value]="codep.nom" (onSelectionChange)="onCodepSelected($event, codep)">
+                {{ codep.nom }}
+             </md-option>
+          </md-autocomplete>
+        </div>
+        
+        <div class="form-group">
+          <md-form-field class="md-full-width">
+            <input type="text" mdInput placeholder="Club" [mdAutocomplete]="autoClubs" [(ngModel)]="txtClub"/>
+          </md-form-field>
+          <md-autocomplete #autoClubs>
+             <md-option *ngFor="let club of filterAutocomplete(clubs, txtClub)" [value]="club.nom" (onSelectionChange)="onClubSelected($event, club)">
+                {{ club.nom }}
+             </md-option>
+          </md-autocomplete>
+        </div>
+        
+        <img [src]="selectedClub?.urlLogo" />
+        
+    </div>
+  </div>
+</div>
+
+
