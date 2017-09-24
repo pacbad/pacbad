@@ -1,3 +1,4 @@
+
 a {
   cursor: pointer;
 }
@@ -184,4 +185,8 @@ footer .footer-right {
 .compte-cree-le {
   text-align: right;
   font-style: italic;
+}
+
+.md-full-width {
+  width: 100% !important;
 }

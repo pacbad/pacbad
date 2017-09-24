@@ -16,6 +16,7 @@ import java.text.NumberFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -23,33 +24,76 @@ import javax.net.ssl.TrustManagerFactory;
 
 import org.json.simple.JSONObject;
 
+import fr.pacbad.entities.ffbad.WSDetailInstance;
 import fr.pacbad.entities.ffbad.WSJoueurDetail;
+import fr.pacbad.entities.ffbad.WSListeInstance;
 import fr.pacbad.filter.CorsFilter;
 import fr.pacbad.logger.PacbadLogger;
 import fr.pacbad.services.ffbad.FfbadJsonParser;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Ehcache;
+import net.sf.ehcache.Element;
 
 public class PoonaService {
-
-	@Inject
-	private ParametreService parametre;
 
 	private static final String URL = "https://ws.ffbad.com/";
 	private static final String CERTIFICATE_NAME = "/Gandi Standard SSL CA 2.crt";
 
 	private static final PacbadLogger LOGGER = PacbadLogger.getLogger(CorsFilter.class);
 
-	public WSJoueurDetail getByLicence(final String licence) throws IOException {
+	@Inject
+	private ParametreService parametre;
+
+	private Ehcache cache;
+
+	@PostConstruct
+	public void init() {
+		final CacheManager cacheManager = CacheManager.newInstance();
+		cache = cacheManager.addCacheIfAbsent("poona");
+	}
+
+	public WSJoueurDetail getJoueurByLicence(final String licence) throws IOException {
 		final Map<String, Object> params = new LinkedHashMap<String, Object>();
 		final NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 		numberFormat.setMinimumIntegerDigits(8);
 		numberFormat.setGroupingUsed(false);
 		params.put("Licence", numberFormat.format(Long.parseLong(licence)));
-		final WSJoueurDetail result = call("ws_getlicenceinfobylicence", params, WSJoueurDetail.class);
+		final WSJoueurDetail result = call("ws_getlicenceinfobylicence", params, WSJoueurDetail.class, null);
 		return result;
 	}
 
-	protected <T> T call(final String functionName, final Map<String, Object> params, final Class<T> typeAttendu)
-			throws IOException {
+	public WSListeInstance getFederation() throws IOException {
+		final Map<String, Object> params = new LinkedHashMap<String, Object>();
+		final WSListeInstance result = call("ws_getfederation", params, WSListeInstance.class, "federation");
+		return result;
+	}
+
+	public WSListeInstance getInstanceFromParent(final long idInstanceParent) throws IOException {
+		final Map<String, Object> params = new LinkedHashMap<String, Object>();
+		params.put("ID_Instance", idInstanceParent);
+		final WSListeInstance result = call("ws_getinstancelistbyinstance", params, WSListeInstance.class,
+				String.valueOf(idInstanceParent));
+		return result;
+	}
+
+	public WSDetailInstance getInstanceById(final long idInstance) throws IOException {
+		final Map<String, Object> params = new LinkedHashMap<String, Object>();
+		params.put("ID_Instance", idInstance);
+		final WSDetailInstance result = call("ws_getinstancedetailbyinstance", params, WSDetailInstance.class,
+				String.valueOf(idInstance));
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <T> T call(final String functionName, final Map<String, Object> params, final Class<T> typeAttendu,
+			final String cacheParam) throws IOException {
+
+		if (cacheParam != null) {
+			final Element dataFromCache = cache.get(functionName + "_" + cacheParam);
+			if (dataFromCache != null && !dataFromCache.isExpired()) {
+				return (T) dataFromCache.getObjectValue();
+			}
+		}
 
 		String url = URL;
 
@@ -59,6 +103,9 @@ public class PoonaService {
 		final AuthParam auth = new AuthParam();
 		auth.login = parametre.getString(ParametreService.KEY_POONA_LOGIN);
 		auth.password = parametre.getString(ParametreService.KEY_POONA_PASSWORD);
+		if (auth.login == null || auth.login.equalsIgnoreCase("inconnu")) {
+			throw new IOException("Identifiants Poona non renseignés");
+		}
 
 		// url += "rest/?query=" + query.toString();
 		// url += "&auth=" + auth.toString();
@@ -98,6 +145,7 @@ public class PoonaService {
 			urlConnection.setSSLSocketFactory(context.getSocketFactory());
 			final InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 			final T result = FfbadJsonParser.parse(in, typeAttendu);
+			cache.put(new Element(functionName + "_" + cacheParam, result));
 			return result;
 		} catch (final CertificateException | NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
 			throw new IOException(e);

@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import {MdOptionSelectionChange} from '@angular/material';
 
 import { AdminService } from './admin.service';
 import { AuthentificationService } from '../services/authentification.service';
+import { PoonaService } from '../services/poona.service';
 import { User } from '../models/user.model';
 import { Parametre } from '../models/parametre.model';
+import { Instance } from '../models/instance.model';
 
 @Component({
   selector: 'app-admin',
@@ -24,7 +27,18 @@ export class AdminComponent implements OnInit {
   newAdmin: User;
   editingParametre: Parametre;
   
-  constructor(private adminService: AdminService, private authentificationService: AuthentificationService) { }
+  federation: Instance;
+  ligues: Instance[];
+  selectedLigue: Instance;
+  txtLigue: string;
+  codeps: Instance[];
+  selectedCodep: Instance;
+  txtCodep: string;
+  clubs: Instance[];
+  selectedClub: Instance;
+  txtClub: string;
+  
+  constructor(private adminService: AdminService, private authentificationService: AuthentificationService, private poonaService: PoonaService) { }
 
   ngOnInit() {
     this.adminService.getParametres()
@@ -36,6 +50,20 @@ export class AdminComponent implements OnInit {
       });
     this.listerAdministrateurs();
     this.currentUserLogin = this.authentificationService.getUserInfo().identifiant;
+    
+    this.poonaService.getFederation()
+      .subscribe(res => {
+        this.federation = res;
+      }, err => {
+          this.error = "Impossible de récupérer les informations de la fédération : " + err.error.message;
+      });
+    this.poonaService.getLigues()
+      .subscribe(res => {
+        this.ligues = res;
+      }, err => {
+          this.error = "Impossible de récupérer les ligues : " + err.error.message;
+      });
+      
   }
   
   private listerAdministrateurs() {
@@ -126,6 +154,61 @@ export class AdminComponent implements OnInit {
         err => {
           this.error = "Impossible de vider le cache : " + err.error.message;
         });;
+  }
+
+  filterAutocomplete(listeInstances: Instance[], filtre: string): Instance[] {
+    if (listeInstances && filtre) {
+      return listeInstances
+        .filter(instance => instance.nom.toLowerCase().indexOf(filtre.toLowerCase()) >= 0);
+    } else if (listeInstances) {
+      return listeInstances;
+    }
+    return [];
+  }
+  
+  public onLigueSelected(event: MdOptionSelectionChange, ligue: Instance) {
+    if (event.source.selected) {
+      this.selectedLigue = ligue;
+      this.selectedCodep = undefined;
+      this.txtCodep = undefined;
+      this.selectedClub = undefined;
+      this.txtClub = undefined;
+      
+      this.poonaService.getCodeps(ligue.id)
+        .subscribe(res => {
+          this.codeps = res;
+        }, err => {
+            this.error = "Impossible de récupérer les codeps : " + err.error.message;
+        });
+    }
+  }
+  
+  public onCodepSelected(event: MdOptionSelectionChange, codep: Instance) {
+    if (event.source.selected) {
+      this.selectedCodep = codep;
+      this.selectedClub = undefined;
+      this.txtClub = undefined;
+      
+      this.poonaService.getClubs(this.selectedLigue.id, codep.id)
+        .subscribe(res => {
+          this.clubs = res;
+        }, err => {
+            this.error = "Impossible de récupérer les clubs : " + err.error.message;
+        });
+    }
+  }
+  
+  public onClubSelected(event: MdOptionSelectionChange, club: Instance) {
+    if (event.source.selected) {
+      this.selectedClub = club;
+      
+      this.poonaService.getClub(club.id)
+        .subscribe(res => {
+          console.log("Club sélectionné", club);
+        }, err => {
+            this.error = "Impossible de récupérer les informations du club : " + err.error.message;
+        });
+    }
   }
 
 }

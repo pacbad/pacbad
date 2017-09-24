@@ -34,7 +34,7 @@ public class PoonaServiceTest extends PacbadTest {
 	@Test
 	public void testGetByLicence() throws IOException {
 		Mockito.when(parametre.getString(ArgumentMatchers.anyString())).thenReturn("mock");
-		final WSJoueurDetail joueur = service.getByLicence("06638740");
+		final WSJoueurDetail joueur = service.getJoueurByLicence("06638740");
 		System.out.println(joueur);
 		Assert.assertEquals("DURAND", joueur.getInformation().getNom());
 		Assert.assertEquals("Benjamin", joueur.getInformation().getPrenom());
@@ -47,7 +47,7 @@ public class PoonaServiceTest extends PacbadTest {
 
 	@Test
 	public void testGetByLicenceSans0() throws IOException {
-		final WSJoueurDetail joueur = service.getByLicence("6638740");
+		final WSJoueurDetail joueur = service.getJoueurByLicence("6638740");
 		System.out.println(joueur);
 		Assert.assertEquals("DURAND", joueur.getInformation().getNom());
 		Assert.assertEquals("Benjamin", joueur.getInformation().getPrenom());

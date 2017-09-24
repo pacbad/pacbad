@@ -16,6 +16,7 @@ import fr.pacbad.auth.KeyGenerator;
 import fr.pacbad.dao.SimpleDao;
 import fr.pacbad.dao.UserDao;
 import fr.pacbad.entities.User;
+import fr.pacbad.entities.ffbad.WSDetailInstance;
 import fr.pacbad.entities.ffbad.WSJoueurDetail;
 import fr.pacbad.entities.ref.RoleUtilisateurEnum;
 import fr.pacbad.exception.ExceptionFonctionnelle;
@@ -76,7 +77,7 @@ public class UserService extends SimpleService<User> {
 		}
 		// Récupération du joueur dans Poona (à partir de sa licence)
 		try {
-			final WSJoueurDetail joueurPoona = poonaService.getByLicence(String.valueOf(user.getLicence()));
+			final WSJoueurDetail joueurPoona = poonaService.getJoueurByLicence(String.valueOf(user.getLicence()));
 			if (joueurPoona == null || joueurPoona.getInformation() == null) {
 				throw new ExceptionFonctionnelle(
 						"Impossible de récupérer les informations depuis Poona pour la licence " + user.getLicence()
@@ -92,6 +93,10 @@ public class UserService extends SimpleService<User> {
 
 			user.setNom(joueurPoona.getInformation().getNom());
 			user.setPrenom(joueurPoona.getInformation().getPrenom());
+
+			final WSDetailInstance club = poonaService.getInstanceById(joueurPoona.getInformation().getClubId());
+
+			// TODO création du lien entre le joueur et le club
 		} catch (final IOException e) {
 			throw new IOException("Connexion à Poona impossible", e);
 		}

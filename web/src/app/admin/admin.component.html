@@ -74,6 +74,47 @@
         <div class="form-group has-success" *ngIf="information">
             <div class="help-block">{{information}}</div>
         </div>
+        <hr />
+        <h2>Demo parcours fédération</h2>
+        <div>
+          Fédération : {{federation?.nom}}
+        </div>
+        
+        <div class="form-group">
+          <md-form-field class="md-full-width">
+            <input type="text" mdInput placeholder="Ligue" [mdAutocomplete]="autoLigues" [(ngModel)]="txtLigue" width="100%"/>
+          </md-form-field>
+          <md-autocomplete #autoLigues>
+             <md-option *ngFor="let ligue of filterAutocomplete(ligues, txtLigue)" [value]="ligue.nom" (onSelectionChange)="onLigueSelected($event, ligue)">
+                {{ ligue.nom }}
+             </md-option>
+          </md-autocomplete>
+        </div>
+        
+        <div class="form-group">
+          <md-form-field class="md-full-width">
+            <input type="text" mdInput placeholder="Codep" [mdAutocomplete]="autoCodeps" [(ngModel)]="txtCodep"/>
+          </md-form-field>
+          <md-autocomplete #autoCodeps>
+             <md-option *ngFor="let codep of filterAutocomplete(codeps, txtCodep)" [value]="codep.nom" (onSelectionChange)="onCodepSelected($event, codep)">
+                {{ codep.nom }}
+             </md-option>
+          </md-autocomplete>
+        </div>
+        
+        <div class="form-group">
+          <md-form-field class="md-full-width">
+            <input type="text" mdInput placeholder="Club" [mdAutocomplete]="autoClubs" [(ngModel)]="txtClub"/>
+          </md-form-field>
+          <md-autocomplete #autoClubs>
+             <md-option *ngFor="let club of filterAutocomplete(clubs, txtClub)" [value]="club.nom" (onSelectionChange)="onClubSelected($event, club)">
+                {{ club.nom }}
+             </md-option>
+          </md-autocomplete>
+        </div>
+        
+        <img [src]="selectedClub?.urlLogo" />
+        
     </div>
   </div>
 </div>
