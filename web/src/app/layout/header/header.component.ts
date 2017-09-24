@@ -13,8 +13,8 @@ import {Claims} from '../../models/user.model';
 })
 export class HeaderComponent implements OnInit {
 
-  private connecte: boolean;
-  private userInfo: Claims;
+  connecte: boolean;
+  userInfo: Claims;
   
   private currentRoute: any;
 
