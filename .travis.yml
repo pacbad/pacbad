@@ -15,7 +15,7 @@ matrix:
           - "node_modules"
       before_script:
         - cd web
-        - npm install -g angular-cli
+        - npm install -g @angular/cli
 
 notifications:
   email:
