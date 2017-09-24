@@ -1,0 +1,16 @@
+matrix:
+  include:
+    - language: java
+      jdk: oraclejdk8
+      before_script:
+        - cd services
+      script:
+        - mvn install
+
+    - language: node_js
+      before_script:
+        - cd web
+
+notifications:
+  email:
+    - durandben@gmail.com
