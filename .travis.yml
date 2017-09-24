@@ -16,6 +16,8 @@ matrix:
       before_script:
         - cd web
         - npm install -g @angular/cli
+        - npm install
+        - npm run-script build
 
 notifications:
   email:
