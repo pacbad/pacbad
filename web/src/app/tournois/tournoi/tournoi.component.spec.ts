@@ -1,4 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {APP_BASE_HREF} from '@angular/common';
+import { RouterModule, Routes } from '@angular/router';
+
+import { TournoiService } from '../tournoi.service';
 
 import { TournoiComponent } from './tournoi.component';
 
@@ -8,7 +13,15 @@ describe('TournoiComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TournoiComponent ]
+      declarations: [ TournoiComponent ],
+      providers: [
+        TournoiService,
+        {provide: APP_BASE_HREF, useValue : '/' }
+      ],
+      imports: [
+        HttpClientModule,
+        RouterModule.forRoot([])
+      ]
     })
     .compileComponents();
   }));

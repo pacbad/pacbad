@@ -1,11 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { TournoiService } from './tournoi.service';
 
 describe('TournoiService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TournoiService]
+      providers: [TournoiService],
+      imports: [
+        HttpClientModule
+      ]
     });
   });
 

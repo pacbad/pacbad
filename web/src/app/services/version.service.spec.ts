@@ -1,11 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { VersionService } from './version.service';
 
 describe('VersionService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [VersionService]
+      providers: [VersionService],
+      imports: [
+        HttpClientModule
+      ]
     });
   });
 
