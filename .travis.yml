@@ -45,6 +45,12 @@ matrix:
         
       after_success:
         - npm run build
+        
+      deploy:
+        provider: heroku
+        api_key:
+          secure: $HEROKU_AUTH_TOKEN
+        app: pacbad
 
 notifications:
   email:
