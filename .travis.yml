@@ -48,9 +48,10 @@ matrix:
         
       deploy:
         provider: heroku
+        app: pacbad
         api_key:
           secure: $HEROKU_AUTH_TOKEN
-        app: pacbad
+        run: npm install -g @angular/cli
 
 notifications:
   email:
