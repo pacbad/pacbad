@@ -13,6 +13,12 @@ matrix:
         
       script:
         - mvn install
+        
+      deploy:
+        provider: heroku
+        app: pacbad-services
+        api_key:
+          secure: $HEROKU_AUTH_TOKEN
 
 
     - language: node_js
@@ -40,7 +46,6 @@ matrix:
 
       before_script:
         - cd web
-        - npm install -g @angular/cli
         - npm install
         
       after_success:
@@ -51,7 +56,6 @@ matrix:
         app: pacbad
         api_key:
           secure: $HEROKU_AUTH_TOKEN
-        run: npm install -g @angular/cli
 
 notifications:
   email:
