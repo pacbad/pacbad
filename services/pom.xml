@@ -11,7 +11,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 
-		<!-- Les propriétés suivantes seront mises dans le fichier build-info.properties 
+		<!-- Les propriétés suivantes seront mises dans le fichier build-info.properties
 			dans le jar (avec le plugin de build ci-dessus). -->
 		<!-- Ces propriétés sont connues quand le build est fait par la PIC (Jenkins). -->
 		<build.number>${env.BUILD_NUMBER}</build.number>
@@ -22,7 +22,7 @@
 		<build.svnRevision>${env.SVN_REVISION}</build.svnRevision>
 		<build.svnUrl>${env.SVN_URL}</build.svnUrl>
 
-		<!-- Pour les propriétés suivantes, ce qui importe c'est les propriétés 
+		<!-- Pour les propriétés suivantes, ce qui importe c'est les propriétés
 			du module courant qui contient les infos globales sur le build. -->
 		<build.projectGroupId>${project.groupId}</build.projectGroupId>
 		<build.projectArtifactId>${project.artifactId}</build.projectArtifactId>
@@ -172,6 +172,29 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+			
+			<!-- Pour lancer l'application sur Heroku avec jetty-runner -->
+			<plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.3</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals><goal>copy</goal></goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-runner</artifactId>
+                  <version>9.4.6.v20170531</version>
+                  <destFileName>jetty-runner.jar</destFileName>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+         </executions>
+      </plugin>
 		</plugins>
 	</build>
 
