@@ -3,10 +3,14 @@ package fr.pacbad.resources;
 import java.io.InputStream;
 import java.util.Properties;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import fr.pacbad.entities.InfosHeader;
+import fr.pacbad.services.TournoiService;
 
 @Path("/")
 public class IndexResourceImpl {
@@ -15,6 +19,9 @@ public class IndexResourceImpl {
 	// PacbadLogger.getLogger(IndexResourceImpl.class);
 
 	private static final Properties buildProps = chargerBuildProps();
+
+	@Inject
+	private TournoiService tournoiService;
 
 	private static Properties chargerBuildProps() {
 		final InputStream is = IndexResourceImpl.class.getResourceAsStream("/build-info.properties");
@@ -43,6 +50,15 @@ public class IndexResourceImpl {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getBuildDate() {
 		return buildProps.getProperty("build.timestamp", "?");
+	}
+
+	@GET
+	@Path("infosHeader")
+	@Produces(MediaType.APPLICATION_JSON)
+	public InfosHeader getInfosHeader() {
+		final InfosHeader infos = new InfosHeader();
+		infos.setNbTournois(tournoiService.count());
+		return infos;
 	}
 
 }

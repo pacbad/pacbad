@@ -43,6 +43,10 @@ public abstract class SimpleService<T extends SimpleEntity> {
 		return getDao().getAll();
 	}
 
+	public long count() {
+		return getDao().count();
+	}
+
 	protected T detach(final T e) {
 		getDao().detach(e);
 		return e;

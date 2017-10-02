@@ -71,6 +71,13 @@ public abstract class SimpleDao<T extends SimpleEntity> {
 		return query.getResultList();
 	}
 
+	public long count() {
+		final Query query = getEntityManager()
+				.createQuery("Select count(e.id) from " + getEntityType().getSimpleName() + " e");
+		cacheQueryIfNeeded(query);
+		return (long) query.getSingleResult();
+	}
+
 	protected Class<T> getEntityType() {
 		@SuppressWarnings("unchecked")
 		final Class<T> persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
