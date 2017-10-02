@@ -11,7 +11,7 @@
     "test:auto": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "ng build --aot --prod"
+    "postinstall": "ng build --aot --environment heroku"
   },
   "engines": {
     "node": "~6.11.1",

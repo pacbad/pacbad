@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  services_basepath: 'https://pacbad-services.herokuapp.com'
+  services_basepath: 'https://services.pacbad.fr'
 };
