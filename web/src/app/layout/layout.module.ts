@@ -8,6 +8,8 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { LayoutCommunComponent } from './layout-commun/layout-commun.component';
 
+import { HeaderService } from './header/header.service';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -15,6 +17,7 @@ import { LayoutCommunComponent } from './layout-commun/layout-commun.component';
     ServicesModule
   ],
   declarations: [HeaderComponent, FooterComponent, LayoutCommunComponent],
-  exports: [HeaderComponent, FooterComponent]
+  exports: [HeaderComponent, FooterComponent],
+  providers: [HeaderService]
 })
 export class LayoutModule { }

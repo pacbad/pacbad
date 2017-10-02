@@ -9,14 +9,17 @@ export class TournoisComponent implements OnInit {
 	ready: boolean;
 	tournois : any;
 
-  	constructor(private tournoiService : TournoiService) { }
+	constructor(private tournoiService : TournoiService) { }
 
 	ngOnInit() {
-		this.ready = true;
-		this.tournoiService.getTournois().subscribe(
+		this.tournoiService.getTournois()
+		  .subscribe(
         tournois => {
+		      this.ready = true;
           this.tournois = tournois;
-        });
+        }, err => {
+        window.location.href = '/erreur';
+      });
 	}
 
 }
