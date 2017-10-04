@@ -190,3 +190,11 @@ footer .footer-right {
 .md-full-width {
   width: 100% !important;
 }
+
+/*.table-tournois td {
+  cursor: pointer;
+}*/
+
+.table-tournois td a {
+  color: inherit;
+}

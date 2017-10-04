@@ -7,23 +7,23 @@
     
       <h2>Liste des tournois à venir</h2>
 
-      <table class="table table-striped table-hover table-bordered">
+      <table class="table table-striped table-hover table-bordered table-tournois">
         <tr>
           <th>Nom</th>
           <th>Date début</th>
-          <th>Date fin</th>
+          <th class="hidden-xs">Date fin</th>
           <th>Ville</th>
-          <th>Département</th>
-          <th>Région</th>
+          <th class="hidden-xs">Département</th>
+          <th class="hidden-xs">Région</th>
         </tr>
       
-        <tr *ngFor="let tournoi of tournois" [routerLink]="['/tournoi', tournoi.id]">
-          <td>{{tournoi.nom}}</td>
-          <td>{{tournoi.dateDebut|date:"dd/MM/yyyy"}}</td>
-          <td>{{tournoi.dateFin|date:"dd/MM/yyyy"}}</td>
-          <td>{{tournoi.lieu}}</td>
-          <td>{{tournoi.departement}}</td>
-          <td>{{tournoi.region}}</td>
+        <tr *ngFor="let tournoi of tournois">
+          <td><a [routerLink]="['/tournoi', tournoi.id]">{{tournoi.nom}}</a></td>
+          <td><a [routerLink]="['/tournoi', tournoi.id]">{{tournoi.dateDebut|date:"dd/MM/yyyy"}}</a></td>
+          <td class="hidden-xs"><a [routerLink]="['/tournoi', tournoi.id]">{{tournoi.dateFin|date:"dd/MM/yyyy"}}</a></td>
+          <td><a [routerLink]="['/tournoi', tournoi.id]">{{tournoi.lieu}}</a></td>
+          <td class="hidden-xs"><a [routerLink]="['/tournoi', tournoi.id]">{{tournoi.departement}}</a></td>
+          <td class="hidden-xs"><a [routerLink]="['/tournoi', tournoi.id]">{{tournoi.region}}</a></td>
         </tr>
       </table>
         
