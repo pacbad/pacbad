@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-@Entity(name = "Tournoi")
+@Entity
 public class Tournoi implements SimpleEntity {
 
 	public Tournoi() {

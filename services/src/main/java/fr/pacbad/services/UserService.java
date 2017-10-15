@@ -6,6 +6,7 @@ import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -13,9 +14,13 @@ import javax.inject.Inject;
 import javax.ws.rs.core.Response.Status;
 
 import fr.pacbad.auth.KeyGenerator;
+import fr.pacbad.dao.LienUserInstanceDao;
 import fr.pacbad.dao.SimpleDao;
 import fr.pacbad.dao.UserDao;
+import fr.pacbad.entities.Instance;
+import fr.pacbad.entities.LienUserInstance;
 import fr.pacbad.entities.User;
+import fr.pacbad.entities.ffbad.MembreBureau;
 import fr.pacbad.entities.ffbad.WSDetailInstance;
 import fr.pacbad.entities.ffbad.WSJoueurDetail;
 import fr.pacbad.entities.ref.RoleUtilisateurEnum;
@@ -34,6 +39,9 @@ public class UserService extends SimpleService<User> {
 
 	@Inject
 	private PoonaService poonaService;
+
+	@Inject
+	private InstanceService instanceService;
 
 	@Override
 	protected SimpleDao<User> createDao() {
@@ -75,6 +83,9 @@ public class UserService extends SimpleService<User> {
 		if (licence == null || licence <= 0) {
 			throw new ExceptionFonctionnelle("Licence invalide : " + licence);
 		}
+
+		final WSDetailInstance club;
+
 		// Récupération du joueur dans Poona (à partir de sa licence)
 		try {
 			final WSJoueurDetail joueurPoona = poonaService.getJoueurByLicence(String.valueOf(user.getLicence()));
@@ -94,9 +105,8 @@ public class UserService extends SimpleService<User> {
 			user.setNom(joueurPoona.getInformation().getNom());
 			user.setPrenom(joueurPoona.getInformation().getPrenom());
 
-			final WSDetailInstance club = poonaService.getInstanceById(joueurPoona.getInformation().getClubId());
+			club = poonaService.getInstanceById(joueurPoona.getInformation().getClubId());
 
-			// TODO création du lien entre le joueur et le club
 		} catch (final IOException e) {
 			throw new IOException("Connexion à Poona impossible", e);
 		}
@@ -106,28 +116,53 @@ public class UserService extends SimpleService<User> {
 
 		user.setDateCreation(new Date());
 
-		// TODO Mettre à jour le rôle de l'utilisateur en fonction des informations du
-		// club récupérées dans Poona (pour savoir s'il est responsable ou joueur
-		// simple)
-		user.setRole(RoleUtilisateurEnum.JOUEUR.getNom());
+		user.setRole(null);
 
 		// Enregistrement de l'utilisateur en base
 		create(user);
+
+		if (club != null) {
+			// Récupération de l'instance en base
+			Instance instance = instanceService.getById(club.getInstance().getId());
+			if (instance == null) {
+				instance = instanceService.create(club.getInstance());
+			}
+
+			final LienUserInstanceDao lienUserInstanceDao = new LienUserInstanceDao();
+			final LienUserInstance lienJoueur = new LienUserInstance();
+			lienJoueur.setInstance(instance);
+			lienJoueur.setUser(user);
+			lienJoueur.setRole(LienUserInstance.ROLE_JOUEUR);
+			lienUserInstanceDao.create(lienJoueur);
+
+			boolean isMembreBureau = false;
+			final Collection<MembreBureau> bureau = instance.getBureau();
+			for (final MembreBureau membreBureau : bureau) {
+				if (user.getLicence() != null && String.valueOf(user.getLicence()).equals(membreBureau.getLicence())) {
+					isMembreBureau = true;
+					break;
+				}
+			}
+			if (isMembreBureau) {
+				final LienUserInstance lienResponsable = new LienUserInstance();
+				lienResponsable.setInstance(instance);
+				lienResponsable.setUser(user);
+				lienResponsable.setRole(LienUserInstance.ROLE_RESPONSABLE_CLUB);
+				lienUserInstanceDao.create(lienResponsable);
+			}
+		}
+
 	}
 
 	public User getByIdentifiant(final String identifiant) {
 		User user = getDao().getByColumn("identifiant", identifiant);
-		if (user != null) {
-			user = detach(user);
-		}
+		user = enrichirUtilisateur(user);
 		return user;
 	}
 
 	public User getByLicence(final Long licence) {
 		User user = getDao().getByColumn("licence", licence);
-		if (user != null) {
-			user = detach(user);
-		}
+		user = enrichirUtilisateur(user);
 		return user;
 	}
 
@@ -201,9 +236,7 @@ public class UserService extends SimpleService<User> {
 			throw new ExceptionFonctionnelle("L'utilisateur n'est pas un administrateur");
 		}
 
-		// TODO vérifier si l'utilisateur a un rôle de responsable de club
-
-		u.setRole(RoleUtilisateurEnum.JOUEUR.getNom());
+		u.setRole(null);
 		update(u);
 	}
 
@@ -218,6 +251,14 @@ public class UserService extends SimpleService<User> {
 
 		u.setRole(RoleUtilisateurEnum.ADMIN.getNom());
 		update(u);
+	}
+
+	private User enrichirUtilisateur(final User utilisateur) {
+		User u = utilisateur;
+		if (u != null) {
+			u = detach(u);
+		}
+		return u;
 	}
 
 }

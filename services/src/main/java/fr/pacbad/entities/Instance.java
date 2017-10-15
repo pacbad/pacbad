@@ -1,17 +1,19 @@
 package fr.pacbad.entities;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import fr.pacbad.entities.ffbad.Arbitre;
 import fr.pacbad.entities.ffbad.MembreBureau;
 
-@Entity(name = "Instance")
+@Entity
 public class Instance implements SimpleEntity {
 
 	@Column(name = "id")
@@ -73,6 +75,9 @@ public class Instance implements SimpleEntity {
 
 	@JsonProperty("LAT_NB_ETOILE")
 	private Integer nbEtoiles;
+
+	@OneToMany
+	private List<LienUserInstance> utilisateurs;
 
 	private transient Instance codep;
 
@@ -233,6 +238,14 @@ public class Instance implements SimpleEntity {
 
 	public void setBureau(final Collection<MembreBureau> bureau) {
 		this.bureau = bureau;
+	}
+
+	public List<LienUserInstance> getUtilisateurs() {
+		return utilisateurs;
+	}
+
+	public void setUtilisateurs(final List<LienUserInstance> utilisateurs) {
+		this.utilisateurs = utilisateurs;
 	}
 
 }

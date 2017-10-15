@@ -12,7 +12,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Entity(name = "Parametre")
+@Entity
 public class Parametre implements SimpleEntity {
 
 	@Column(name = "id")

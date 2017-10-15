@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   
   user: User;
   loading: boolean;
-  error: boolean;
+  error: string;
   
   redirectUri: string;
 
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
           window.location.href = redirect;
         },
         err => {
-          this.error = true;
+          this.error = JSON.parse(err.error).message;
         });
   }
 

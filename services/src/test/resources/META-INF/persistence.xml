@@ -8,6 +8,7 @@
 		<class>fr.pacbad.entities.User</class>
 		<class>fr.pacbad.entities.Tournoi</class>
     <class>fr.pacbad.entities.Instance</class>
+    <class>fr.pacbad.entities.LienUserInstance</class>
 		
 		<shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
 		

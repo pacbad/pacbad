@@ -1,18 +1,21 @@
 package fr.pacbad.entities;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Entity(name = "User")
+@Entity
 public class User implements SimpleEntity {
 
 	@Column(name = "id")
@@ -53,6 +56,9 @@ public class User implements SimpleEntity {
 	private String password;
 	@JsonFormat(pattern = "yyyy-MM-dd", locale = "fr_FR", timezone = "Europe/Paris")
 	private Date dateNaissance;
+
+	@OneToMany(fetch = FetchType.EAGER)
+	private List<LienUserInstance> instances;
 
 	@Override
 	public Long getId() {
@@ -149,6 +155,14 @@ public class User implements SimpleEntity {
 
 	public void setAncienPassword(final String ancienPassword) {
 		this.ancienPassword = ancienPassword;
+	}
+
+	public List<LienUserInstance> getInstances() {
+		return instances;
+	}
+
+	public void setInstances(final List<LienUserInstance> instances) {
+		this.instances = instances;
 	}
 
 }
