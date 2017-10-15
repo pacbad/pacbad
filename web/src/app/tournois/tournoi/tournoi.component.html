@@ -1,5 +1,23 @@
-<p>
-  tournoi works!
 
-  
-</p>
+
+<chargement-ecran *ngIf="!tournoiSelected"></chargement-ecran>
+
+<div *ngIf="tournoiSelected">
+<h3>Tournoi : {{tournoiSelected.nom}} </h3>
+
+<label>Lieu : </label>{{tournoiSelected.lieu}}<br/>
+<label>Département : </label>{{tournoiSelected.departement}}<br/>
+<label>Région : </label>{{tournoiSelected.region}}<br/>
+
+<label>Nombre de joueurs maximum : </label>{{tournoiSelected.nbJoueursMax}}<br/>
+<label>Nombre de terrains : </label>{{tournoiSelected.nbTerrains}}<br/>
+
+<label>Type de tournoi : </label>
+<span *ngIf="tournoiSelected.decoupageParCote"> Par points</span>
+<span *ngIf="!tournoiSelected.decoupageParCote"> Par catégorie</span>
+<br/>
+<label>Date de début : </label>{{tournoiSelected.dateDebut|date:"dd/MM/yyyy"}}<br/>
+<label>Date de fin : </label>{{tournoiSelected.dateFin|date:"dd/MM/yyyy"}}<br/>
+
+ 
+</div>

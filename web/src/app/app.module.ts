@@ -36,6 +36,7 @@ const appRoutes: Routes = [
     children: [
         { path: '', component: HomeComponent },
         { path: 'tournois', component: TournoisComponent, data: { title: 'Tournois' } },
+        { path: 'tournoi/:id', component: TournoiComponent, data: { title: 'Tournoi' } },
         { path: 'contact', component: ContactComponent, data: { title: 'Contact' } },
         { path: 'a-propos', component: AProposComponent, data: { title: 'A propos' } },
         { path: 'register', component: RegisterComponent, data: { title: 'Créer un compte' } },
@@ -43,7 +44,6 @@ const appRoutes: Routes = [
         { path: 'admin', component: AdminComponent, data: { title: 'Administration', login: true } },
       ]
   },
-  { path: 'tournoi/:id', component: TournoiComponent },
   { path: 'login', component: LoginComponent },
   { path: 'erreur', component: ErreurComponent },
   { path: 'acces-interdit', component: AccesInterditComponent },
