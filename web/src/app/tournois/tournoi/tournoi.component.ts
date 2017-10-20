@@ -5,8 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-tournoi',
-  templateUrl: './tournoi.component.html',
-  styleUrls: ['./tournoi.component.css']
+  templateUrl: './tournoi.component.html'
 })
 export class TournoiComponent implements OnInit {
 
