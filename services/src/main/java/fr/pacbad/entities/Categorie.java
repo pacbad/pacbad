@@ -23,8 +23,8 @@ public class Categorie implements SimpleEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "type")
-	private List<CategorieEnum> types;
+	// @OneToMany(fetch = FetchType.LAZY, mappedBy = "type")
+	private transient List<CategorieEnum> types;
 
 	@Override
 	public Long getId() {
