@@ -5,7 +5,5 @@ import { Component } from '@angular/core';
   templateUrl: './a-propos.component.html'
 })
 export class AProposComponent {
-
-  constructor() { }
-
+  constructor() {}
 }

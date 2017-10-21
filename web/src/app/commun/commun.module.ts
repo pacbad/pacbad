@@ -4,10 +4,8 @@ import { ChargementEcranComponent } from './chargement-ecran/chargement-ecran.co
 import { ChargementMaskComponent } from './chargement-mask/chargement-mask.component';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   declarations: [ChargementEcranComponent, ChargementMaskComponent],
   exports: [ChargementEcranComponent, ChargementMaskComponent]
 })
-export class CommunModule { }
+export class CommunModule {}

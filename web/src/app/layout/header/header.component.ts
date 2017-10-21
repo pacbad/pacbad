@@ -1,20 +1,24 @@
-import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Title} from '@angular/platform-browser';
-import {Router, ResolveEnd, ActivatedRoute, ActivatedRouteSnapshot} from '@angular/router';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Title } from '@angular/platform-browser';
+import {
+  Router,
+  ResolveEnd,
+  ActivatedRoute,
+  ActivatedRouteSnapshot
+} from '@angular/router';
 
-import {AuthentificationService} from '../../services/authentification.service';
-import {HeaderService} from './header.service';
+import { AuthentificationService } from '../../services/authentification.service';
+import { HeaderService } from './header.service';
 
-import {Claims} from '../../models/user.model';
-import {InfosHeader} from '../../models/infosHeader.model';
+import { Claims } from '../../models/user.model';
+import { InfosHeader } from '../../models/infosHeader.model';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html'
 })
 export class HeaderComponent implements OnInit {
-
   @ViewChild('myNavbar') myNavbar: ElementRef;
 
   connecte: boolean;
@@ -23,7 +27,13 @@ export class HeaderComponent implements OnInit {
 
   private currentRoute: any;
 
-  constructor(private router: Router, private currentRouteOnInit: ActivatedRoute, private title: Title, private authentificationService: AuthentificationService, private headerService: HeaderService) {
+  constructor(
+    private router: Router,
+    private currentRouteOnInit: ActivatedRoute,
+    private title: Title,
+    private authentificationService: AuthentificationService,
+    private headerService: HeaderService
+  ) {
     this.currentRoute = this.currentRouteOnInit;
   }
 
@@ -35,10 +45,9 @@ export class HeaderComponent implements OnInit {
       this.connecte = this.userInfo.identifiant !== undefined;
     }
 
-    this.headerService.getInfosHeader().subscribe(
-      (infos: InfosHeader) => {
-        this.infosHeader = infos;
-      });
+    this.headerService.getInfosHeader().subscribe((infos: InfosHeader) => {
+      this.infosHeader = infos;
+    });
 
     this.setTitle();
 
@@ -46,12 +55,17 @@ export class HeaderComponent implements OnInit {
       if (event instanceof ResolveEnd) {
         this.currentRoute = event.state.root;
         this.setTitle();
-        let currentNavbarClasses: string[] = this.myNavbar.nativeElement.getAttribute('class').split(' ');
+        let currentNavbarClasses: string[] = this.myNavbar.nativeElement
+          .getAttribute('class')
+          .split(' ');
         var indexIn: number = currentNavbarClasses.indexOf('in');
         if (indexIn > -1) {
           currentNavbarClasses.splice(indexIn, 1);
         }
-        this.myNavbar.nativeElement.setAttribute("class", currentNavbarClasses.join(' '));
+        this.myNavbar.nativeElement.setAttribute(
+          'class',
+          currentNavbarClasses.join(' ')
+        );
       }
     });
   }
@@ -80,7 +94,7 @@ export class HeaderComponent implements OnInit {
     if (dataTitle) {
       this.title.setTitle(dataTitle + ' | PacBad');
     } else {
-      this.title.setTitle('PacBad')
+      this.title.setTitle('PacBad');
     }
   }
 
@@ -111,5 +125,4 @@ export class HeaderComponent implements OnInit {
     }
     return dataLogin;
   }
-
 }

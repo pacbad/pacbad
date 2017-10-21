@@ -5,7 +5,5 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './layout-commun.component.html'
 })
 export class LayoutCommunComponent {
-
-  constructor() { }
-
+  constructor() {}
 }

@@ -6,16 +6,14 @@ import { AuthentificationService } from '../services/authentification.service';
   selector: 'app-home',
   templateUrl: './home.component.html'
 })
-export class HomeComponent implements OnInit{
-
+export class HomeComponent implements OnInit {
   currentUserLogin: string;
-  
-  constructor(private authentificationService: AuthentificationService) { }
-  
+
+  constructor(private authentificationService: AuthentificationService) {}
+
   public ngOnInit() {
     if (this.authentificationService.getUserInfo()) {
       this.currentUserLogin = this.authentificationService.getUserInfo().identifiant;
     }
   }
-
 }

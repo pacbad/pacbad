@@ -6,20 +6,20 @@ import { TournoiService } from './tournoi.service';
   templateUrl: './tournois.component.html'
 })
 export class TournoisComponent implements OnInit {
-	ready: boolean;
-	tournois : any;
+  ready: boolean;
+  tournois: any;
 
-	constructor(private tournoiService : TournoiService) { }
+  constructor(private tournoiService: TournoiService) {}
 
-	ngOnInit() {
-		this.tournoiService.getTournois()
-		  .subscribe(
-        tournois => {
-		      this.ready = true;
-          this.tournois = tournois;
-        }, err => {
+  ngOnInit() {
+    this.tournoiService.getTournois().subscribe(
+      tournois => {
+        this.ready = true;
+        this.tournois = tournois;
+      },
+      err => {
         window.location.href = '/erreur';
-      });
-	}
-
+      }
+    );
+  }
 }

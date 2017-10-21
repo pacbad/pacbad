@@ -7,13 +7,14 @@ describe('TournoiService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [TournoiService],
-      imports: [
-        HttpClientModule
-      ]
+      imports: [HttpClientModule]
     });
   });
 
-  it('should be created', inject([TournoiService], (service: TournoiService) => {
-    expect(service).toBeTruthy();
-  }));
+  it(
+    'should be created',
+    inject([TournoiService], (service: TournoiService) => {
+      expect(service).toBeTruthy();
+    })
+  );
 });

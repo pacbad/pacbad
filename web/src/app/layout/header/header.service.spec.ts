@@ -7,13 +7,14 @@ describe('HeaderService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [HeaderService],
-      imports: [
-        HttpClientModule
-      ]
+      imports: [HttpClientModule]
     });
   });
 
-  it('should be created', inject([HeaderService], (service: HeaderService) => {
-    expect(service).toBeTruthy();
-  }));
+  it(
+    'should be created',
+    inject([HeaderService], (service: HeaderService) => {
+      expect(service).toBeTruthy();
+    })
+  );
 });

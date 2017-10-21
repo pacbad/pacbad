@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 
 import { VersionService } from '../../services/version.service';
 
@@ -8,10 +8,9 @@ import { VersionService } from '../../services/version.service';
   templateUrl: './footer.component.html'
 })
 export class FooterComponent implements OnInit {
-
   private version: string;
 
-  constructor(private versionService: VersionService) { }
+  constructor(private versionService: VersionService) {}
 
   ngOnInit() {
     this.version = '?';
@@ -19,5 +18,4 @@ export class FooterComponent implements OnInit {
       this.version = data;
     });*/
   }
-
 }

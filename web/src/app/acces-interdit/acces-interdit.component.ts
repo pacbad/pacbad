@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-acces-interdit',
   templateUrl: './acces-interdit.component.html'
 })
-export class AccesInterditComponent{
-
-  constructor() { }
-
+export class AccesInterditComponent {
+  constructor() {}
 }

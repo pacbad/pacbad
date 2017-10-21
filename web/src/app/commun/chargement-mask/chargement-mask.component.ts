@@ -5,7 +5,5 @@ import { Component } from '@angular/core';
   templateUrl: './chargement-mask.component.html'
 })
 export class ChargementMaskComponent {
-
-  constructor() { }
-
+  constructor() {}
 }

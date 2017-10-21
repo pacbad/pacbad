@@ -9,28 +9,28 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './tournoi.component.html'
 })
 export class TournoiComponent implements OnInit {
-
-  private sub:any;
+  private sub: any;
 
   tournoiSelected: Tournoi;
 
-  constructor(private tournoiService : TournoiService, private title: Title, private route:ActivatedRoute) { }
+  constructor(
+    private tournoiService: TournoiService,
+    private title: Title,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-  	this.sub = this.route.params.subscribe(params => {
-       let id = +params['id']; 
+    this.sub = this.route.params.subscribe(params => {
+      let id = +params['id'];
 
-       	this.tournoiService.getTournoi(id).subscribe(
-			(tournoi:Tournoi) => {
-				this.tournoiSelected = tournoi;
-				this.title.setTitle(this.tournoiSelected.nom + ' | PacBad');
-			}
-		);
+      this.tournoiService.getTournoi(id).subscribe((tournoi: Tournoi) => {
+        this.tournoiSelected = tournoi;
+        this.title.setTitle(this.tournoiSelected.nom + ' | PacBad');
+      });
     });
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
-
 }

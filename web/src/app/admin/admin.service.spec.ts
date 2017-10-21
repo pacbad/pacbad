@@ -7,13 +7,14 @@ describe('AdminService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [AdminService],
-      imports: [
-        HttpClientModule
-      ]
+      imports: [HttpClientModule]
     });
   });
 
-  it('should be created', inject([AdminService], (service: AdminService) => {
-    expect(service).toBeTruthy();
-  }));
+  it(
+    'should be created',
+    inject([AdminService], (service: AdminService) => {
+      expect(service).toBeTruthy();
+    })
+  );
 });

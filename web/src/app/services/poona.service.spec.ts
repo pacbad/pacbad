@@ -7,13 +7,14 @@ describe('PoonaService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [PoonaService],
-      imports: [
-        HttpClientModule
-      ]
+      imports: [HttpClientModule]
     });
   });
 
-  it('should be created', inject([PoonaService], (service: PoonaService) => {
-    expect(service).toBeTruthy();
-  }));
+  it(
+    'should be created',
+    inject([PoonaService], (service: PoonaService) => {
+      expect(service).toBeTruthy();
+    })
+  );
 });

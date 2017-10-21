@@ -1,7 +1,6 @@
 export class Tournoi {
-
   id: number;
-  
+
   nom: string;
 
   dateDebut: Date;
@@ -17,5 +16,4 @@ export class Tournoi {
   identifiantPoona: string;
 
   decoupageParCote: boolean;
-
 }

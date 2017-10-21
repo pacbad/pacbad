@@ -7,13 +7,14 @@ describe('AuthentificationService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [AuthentificationService],
-      imports: [
-        HttpClientModule
-      ]
+      imports: [HttpClientModule]
     });
   });
 
-  it('should be created', inject([AuthentificationService], (service: AuthentificationService) => {
-    expect(service).toBeTruthy();
-  }));
+  it(
+    'should be created',
+    inject([AuthentificationService], (service: AuthentificationService) => {
+      expect(service).toBeTruthy();
+    })
+  );
 });

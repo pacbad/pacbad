@@ -5,7 +5,5 @@ import { Component } from '@angular/core';
   templateUrl: './chargement-ecran.component.html'
 })
 export class ChargementEcranComponent {
-
-  constructor() { }
-
+  constructor() {}
 }

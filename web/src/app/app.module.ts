@@ -2,9 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
-import { FormsModule }   from '@angular/forms';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatAutocompleteModule, MatInputModule} from '@angular/material';
+import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatAutocompleteModule, MatInputModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
 
@@ -25,29 +25,59 @@ import { AuthHttpInterceptor } from './services/authentification.interceptor';
 import { MonCompteComponent } from './mon-compte/mon-compte.component';
 import { ErreurComponent } from './erreur/erreur.component';
 
-import {TournoiService} from './tournois/tournoi.service';
+import { TournoiService } from './tournois/tournoi.service';
 import { TournoiComponent } from './tournois/tournoi/tournoi.component';
 import { AdminComponent } from './admin/admin.component';
 import { AdminService } from './admin/admin.service';
 import { AccesInterditComponent } from './acces-interdit/acces-interdit.component';
 
 const appRoutes: Routes = [
-  { path: '', component: LayoutCommunComponent,
+  {
+    path: '',
+    component: LayoutCommunComponent,
     children: [
-        { path: '', component: HomeComponent },
-        { path: 'tournois', component: TournoisComponent, data: { title: 'Tournois' } },
-        { path: 'tournoi/:id', component: TournoiComponent, data: { title: 'Tournoi' } },
-        { path: 'contact', component: ContactComponent, data: { title: 'Contact' } },
-        { path: 'a-propos', component: AProposComponent, data: { title: 'A propos' } },
-        { path: 'register', component: RegisterComponent, data: { title: 'Créer un compte' } },
-        { path: 'compte', component: MonCompteComponent, data: { title: 'Mon compte', login: true } },
-        { path: 'admin', component: AdminComponent, data: { title: 'Administration', login: true } },
-      ]
+      { path: '', component: HomeComponent },
+      {
+        path: 'tournois',
+        component: TournoisComponent,
+        data: { title: 'Tournois' }
+      },
+      {
+        path: 'tournoi/:id',
+        component: TournoiComponent,
+        data: { title: 'Tournoi' }
+      },
+      {
+        path: 'contact',
+        component: ContactComponent,
+        data: { title: 'Contact' }
+      },
+      {
+        path: 'a-propos',
+        component: AProposComponent,
+        data: { title: 'A propos' }
+      },
+      {
+        path: 'register',
+        component: RegisterComponent,
+        data: { title: 'Créer un compte' }
+      },
+      {
+        path: 'compte',
+        component: MonCompteComponent,
+        data: { title: 'Mon compte', login: true }
+      },
+      {
+        path: 'admin',
+        component: AdminComponent,
+        data: { title: 'Administration', login: true }
+      }
+    ]
   },
   { path: 'login', component: LoginComponent },
   { path: 'erreur', component: ErreurComponent },
   { path: 'acces-interdit', component: AccesInterditComponent },
-  { path: '**', component: PageNotFoundComponent },
+  { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({
@@ -64,7 +94,7 @@ const appRoutes: Routes = [
     ErreurComponent,
     TournoiComponent,
     AdminComponent,
-    AccesInterditComponent,
+    AccesInterditComponent
   ],
   imports: [
     BrowserModule,
@@ -85,4 +115,4 @@ const appRoutes: Routes = [
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

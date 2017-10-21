@@ -11,16 +11,18 @@ import { AuthentificationService } from './services/authentification.service';
 export class AppComponent implements OnInit {
   private title: string = 'pacbad';
 
-  constructor(private versionService: VersionService, private authentificationService: AuthentificationService, private meta: Meta) {
-  }
-  
+  constructor(
+    private versionService: VersionService,
+    private authentificationService: AuthentificationService,
+    private meta: Meta
+  ) {}
+
   ngOnInit() {
     // Validation du jeton si existant
     this.authentificationService.validateToken();
-    
-    
+
     this.versionService.getVersion().subscribe((data: string) => {
-      this.meta.addTag({name: 'back.version', value: data});
+      this.meta.addTag({ name: 'back.version', value: data });
     });
   }
 }
