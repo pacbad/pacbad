@@ -11,7 +11,14 @@
     "test:auto": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "precommit": "lint-staged",
     "postinstall": "ng build --aot --environment heroku"
+  },
+  "lint-staged": {
+    "./*.{ts,js,json,css}": [
+      "prettier --write --single-quote",
+      "git add"
+    ]
   },
   "engines": {
     "node": "~6.11.1",
@@ -42,7 +49,9 @@
     "@types/jasmine": "~2.5.53",
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~6.0.60",
+    "angular-ide": "^0.9.32",
     "codelyzer": "~3.0.1",
+    "husky": "^0.14.3",
     "jasmine-core": "~2.6.2",
     "jasmine-spec-reporter": "~4.1.0",
     "karma": "~1.7.0",
@@ -52,6 +61,8 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "karma-phantomjs-launcher": "^1.0.4",
+    "lint-staged": "^4.3.0",
+    "prettier": "^1.7.4",
     "protractor": "~5.1.2",
     "ts-node": "~3.0.4",
     "tslint": "~5.3.2",
