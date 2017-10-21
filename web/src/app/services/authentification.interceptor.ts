@@ -18,7 +18,7 @@ export class AuthHttpInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    let header: string = this.getToken();
+    const header: string = this.getToken();
     if (header) {
       req = req.clone({
         headers: req.headers.set('Authorization', 'Bearer ' + header)
@@ -50,7 +50,7 @@ export class AuthHttpInterceptor implements HttpInterceptor {
   }
 
   getToken(): string {
-    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     if (currentUser && currentUser.token) {
       return currentUser.token;
     }

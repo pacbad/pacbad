@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import {Component, OnInit} from '@angular/core';
+import {DatePipe} from '@angular/common';
 
-import { User } from '../models/user.model';
-import { AuthentificationService } from '../services/authentification.service';
+import {User} from '../models/user.model';
+import {AuthentificationService} from '../services/authentification.service';
 import 'rxjs/add/operator/finally';
 
 @Component({
@@ -47,7 +47,7 @@ export class MonCompteComponent implements OnInit {
       return;
     }
 
-    let userSent: User = new User();
+    const userSent: User = new User();
     Object.assign(userSent, this.user);
     userSent.passwordRepeat = undefined;
 
@@ -58,17 +58,17 @@ export class MonCompteComponent implements OnInit {
         this.loading = false;
       })
       .subscribe(
-        ok => {
-          this.information = 'Information correctement modifiées';
-          this.user.password = '';
-          this.user.passwordRepeat = '';
-          this.user.ancienPassword = '';
-        },
-        err => {
-          this.error =
-            'Impossible de modifier les informations du compte : ' +
-            err.error.message;
-        }
+      ok => {
+        this.information = 'Information correctement modifiées';
+        this.user.password = '';
+        this.user.passwordRepeat = '';
+        this.user.ancienPassword = '';
+      },
+      err => {
+        this.error =
+          'Impossible de modifier les informations du compte : ' +
+          err.error.message;
+      }
       );
   }
 }

@@ -9,15 +9,15 @@
     "build": "ng build --prod",
     "test": "ng test --single-run",
     "test:auto": "ng test",
-    "lint": "ng lint",
+    "lint": "ng lint --type-check",
     "e2e": "ng e2e",
-    "precommit": "lint-staged",
+    "precommit": "lint-staged && npm run lint",
     "postinstall": "ng build --aot --environment heroku"
   },
   "lint-staged": {
     "./*.{ts,js,json,css}": [
       "prettier --write",
-      "git add"
+      ""
     ]
   },
   "engines": {
@@ -66,7 +66,6 @@
     "protractor": "~5.1.2",
     "ts-node": "~3.0.4",
     "tslint": "~5.3.2",
-    "tslint-config-prettier": "^1.6.0",
     "typescript": "~2.3.3"
   }
 }

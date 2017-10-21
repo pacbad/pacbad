@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
-  selector: 'chargement-mask',
+  selector: 'app-chargement-mask',
   templateUrl: './chargement-mask.component.html'
 })
 export class ChargementMaskComponent {

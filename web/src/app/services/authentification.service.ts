@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
-import { User } from '../models/user.model';
+import {User} from '../models/user.model';
 
-import { environment } from '../../environments/environment';
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class AuthentificationService {
   constructor(private http: HttpClient) {}
 
   public login(user: User) {
-    let loginObs: Observable<any> = this.http.post(
+    const loginObs: Observable<any> = this.http.post(
       environment.services_basepath + '/auth/login',
       user
     );
@@ -24,7 +24,7 @@ export class AuthentificationService {
   }
 
   public register(user: User) {
-    let registerObs: Observable<any> = this.http.post(
+    const registerObs: Observable<any> = this.http.post(
       environment.services_basepath + '/auth/register',
       user
     );
@@ -37,7 +37,7 @@ export class AuthentificationService {
   }
 
   public update(user: User) {
-    let updateObs: Observable<any> = this.http.put(
+    const updateObs: Observable<any> = this.http.put(
       environment.services_basepath + '/auth/user',
       user
     );
@@ -63,7 +63,7 @@ export class AuthentificationService {
   }
 
   public validateToken() {
-    let headers: HttpHeaders = this.getAuthorizationHeader();
+    const headers: HttpHeaders = this.getAuthorizationHeader();
     if (headers) {
       this.http
         .post(environment.services_basepath + '/auth/validate', {})
@@ -76,7 +76,7 @@ export class AuthentificationService {
   }
 
   public getAuthorizationHeader(): HttpHeaders {
-    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     if (currentUser && currentUser.token) {
       return new HttpHeaders().set(
         'Authorization',

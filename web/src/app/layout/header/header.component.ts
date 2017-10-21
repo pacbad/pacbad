@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Title } from '@angular/platform-browser';
+import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
+import {Title} from '@angular/platform-browser';
 import {
   Router,
   ResolveEnd,
@@ -8,11 +8,11 @@ import {
   ActivatedRouteSnapshot
 } from '@angular/router';
 
-import { AuthentificationService } from '../../services/authentification.service';
-import { HeaderService } from './header.service';
+import {AuthentificationService} from '../../services/authentification.service';
+import {HeaderService} from './header.service';
 
-import { Claims } from '../../models/user.model';
-import { InfosHeader } from '../../models/infosHeader.model';
+import {Claims} from '../../models/user.model';
+import {InfosHeader} from '../../models/infosHeader.model';
 
 @Component({
   selector: 'app-header',
@@ -38,7 +38,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    let userInfo: any = this.authentificationService.getUserInfo();
+    const userInfo: any = this.authentificationService.getUserInfo();
     this.userInfo = userInfo;
     this.connecte = false;
     if (this.userInfo) {
@@ -55,10 +55,10 @@ export class HeaderComponent implements OnInit {
       if (event instanceof ResolveEnd) {
         this.currentRoute = event.state.root;
         this.setTitle();
-        let currentNavbarClasses: string[] = this.myNavbar.nativeElement
+        const currentNavbarClasses: string[] = this.myNavbar.nativeElement
           .getAttribute('class')
           .split(' ');
-        var indexIn: number = currentNavbarClasses.indexOf('in');
+        const indexIn: number = currentNavbarClasses.indexOf('in');
         if (indexIn > -1) {
           currentNavbarClasses.splice(indexIn, 1);
         }

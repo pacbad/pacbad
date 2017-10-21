@@ -1,7 +1,7 @@
-import { Component, OnInit, AfterViewInit, ViewChildren } from '@angular/core';
+import {Component, OnInit, AfterViewInit, ViewChildren} from '@angular/core';
 
-import { User } from '../models/user.model';
-import { AuthentificationService } from '../services/authentification.service';
+import {User} from '../models/user.model';
+import {AuthentificationService} from '../services/authentification.service';
 
 @Component({
   selector: 'app-register',
@@ -32,7 +32,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    let userSent: User = new User();
+    const userSent: User = new User();
     Object.assign(userSent, this.user);
     userSent.passwordRepeat = undefined;
 
@@ -43,12 +43,12 @@ export class RegisterComponent implements OnInit, AfterViewInit {
         this.loading = false;
       })
       .subscribe(
-        ok => {
-          window.location.href = '/';
-        },
-        err => {
-          this.error = JSON.parse(err.error).message;
-        }
+      ok => {
+        window.location.href = '/';
+      },
+      err => {
+        this.error = JSON.parse(err.error).message;
+      }
       );
   }
 }

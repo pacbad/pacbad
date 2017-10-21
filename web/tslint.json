@@ -57,7 +57,7 @@
     "no-empty-interface": true,
     "no-eval": true,
     "no-inferrable-types": [
-      true,
+      false,
       "ignore-params"
     ],
     "no-misused-new": true,
@@ -139,9 +139,5 @@
     "no-access-missing-member": true,
     "templates-use-public": true,
     "invoke-injectable": true
-  },
-  "extends": [
-    "tslint:latest",
-    "tslint-config-prettier"
-  ]
+  }
 }

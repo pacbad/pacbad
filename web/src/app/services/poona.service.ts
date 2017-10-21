@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
-import { environment } from '../../environments/environment';
-import { Instance } from '../models/instance.model';
+import {environment} from '../../environments/environment';
+import {Instance} from '../models/instance.model';
 
 @Injectable()
 export class PoonaService {
@@ -25,10 +25,10 @@ export class PoonaService {
   public getCodeps(ligueId: number): Observable<Instance[]> {
     return this.http
       .get(
-        environment.services_basepath +
-          '/poona/federation/ligue/' +
-          ligueId +
-          '/codep'
+      environment.services_basepath +
+      '/poona/federation/ligue/' +
+      ligueId +
+      '/codep'
       )
       .map((res: any) => this.mapListeInstances(res));
   }
@@ -36,12 +36,12 @@ export class PoonaService {
   public getClubs(ligueId: number, codepId: number): Observable<Instance[]> {
     return this.http
       .get(
-        environment.services_basepath +
-          '/poona/federation/ligue/' +
-          ligueId +
-          '/codep/' +
-          codepId +
-          '/club'
+      environment.services_basepath +
+      '/poona/federation/ligue/' +
+      ligueId +
+      '/codep/' +
+      codepId +
+      '/club'
       )
       .map((res: any) => this.mapListeInstances(res));
   }
@@ -53,7 +53,7 @@ export class PoonaService {
   }
 
   private mapInstance(res: any): Instance {
-    let instance: Instance = {
+    const instance: Instance = {
       id: res.INS_ID,
       nom: res.INS_NOM,
       urlLogo: res.INS_LOGO
@@ -62,7 +62,7 @@ export class PoonaService {
   }
 
   private mapListeInstances(res: any[]): Instance[] {
-    let instances: Instance[] = [];
+    const instances: Instance[] = [];
     for (const r of res) {
       instances.push(this.mapInstance(r));
     }
