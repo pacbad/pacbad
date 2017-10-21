@@ -1,200 +1,194 @@
-
 a {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 /* Remove the navbar's default margin-bottom and rounded borders */
 .navbar {
-  margin-bottom: 0;
-  border-radius: 0;
+	margin-bottom: 0;
+	border-radius: 0;
 }
 
-.navbar-default .navbar-nav :not(.btn-group) > button.btn, .navbar-default .navbar-nav .btn-group {
-  margin: 0 10px;
+.navbar-default .navbar-nav :not (.btn-group ) >button.btn,
+	.navbar-default .navbar-nav .btn-group {
+	margin: 0 10px;
 }
+
 .navbar-default .navbar-nav button.btn {
-  height: 52px;
+	height: 52px;
 }
 
-.navbar-default .navbar-nav a.active, .navbar-default .navbar-nav a.active:focus, .navbar-default .navbar-nav a.active:hover {
-  color: #555;
-  background-color: #e7e7e7;
+.navbar-default .navbar-nav a.active, .navbar-default .navbar-nav a.active:focus,
+	.navbar-default .navbar-nav a.active:hover {
+	color: #555;
+	background-color: #e7e7e7;
 }
-  
+
 nav.navbar .navbar-brand {
-  padding: 5px;
+	padding: 5px;
 }
 
 /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-.row.content {height: 450px}
+.row.content {
+	height: 450px
+}
 
 /* Set gray background color and 100% height */
 .sidenav {
-  padding-top: 20px;
-  height: 100%;
+	padding-top: 20px;
+	height: 100%;
 }
 
 .navbar-brand img {
-  height: 100%;
+	height: 100%;
 }
 
 /* Set black background color and some padding */
 footer {
-  background-color: #555;
-  border-width: 1px;
-  border-style: solid;
-  padding: 15px;
-  margin-top: 17px;
+	background-color: #555;
+	border-width: 1px;
+	border-style: solid;
+	padding: 15px;
+	margin-top: 17px;
 }
 
 footer a {
-  margin: 0 10px;
+	margin: 0 10px;
 }
 
-
 footer a.active {
-  font-weight: bold;
+	font-weight: bold;
 }
 
 footer .footer-right {
-  float: right;
-  margin-right: 10px;
+	float: right;
+	margin-right: 10px;
 }
 
 /* On small screens, set height to 'auto' for sidenav and grid */
 @media screen and (max-width: 767px) {
-  .sidenav {
-    height: auto;
-    padding: 15px;
-  }
-  .row.content {
-    height:auto;
-  }
-  nav.navbar .navbar-brand .logo {
-    background-image: url('../img/logo_small.png');
-    height: 40px;
-    width: 40px;
-    background-repeat: no-repeat;
-    background-size: 100%;
-    margin-left: 0;
-  }
-  nav.navbar .navbar-brand {
-    height: 50px;
-    width: 50px;
-  }
-  
-  .navbar-default .navbar-nav :not(.btn-group) > button.btn, .navbar-default .navbar-nav .btn-group {
-    margin: 5px 10px;
-  }
-  .navbar-default .navbar-nav button.btn {
-    height: 32px;
-  }
+	.sidenav {
+		height: auto;
+		padding: 15px;
+	}
+	.row.content {
+		height: auto;
+	}
+	nav.navbar .navbar-brand .logo {
+		background-image: url('../img/logo_small.png');
+		height: 40px;
+		width: 40px;
+		background-repeat: no-repeat;
+		background-size: 100%;
+		margin-left: 0;
+	}
+	nav.navbar .navbar-brand {
+		height: 50px;
+		width: 50px;
+	}
+	.navbar-default .navbar-nav :not (.btn-group ) >button.btn,
+		.navbar-default .navbar-nav .btn-group {
+		margin: 5px 10px;
+	}
+	.navbar-default .navbar-nav button.btn {
+		height: 32px;
+	}
 }
 
 @media screen and (min-width: 768px) {
-  nav.navbar.shrink .navbar-nav {
-    margin-top: 0;
-  }
-  nav.navbar .navbar-nav {
-    margin-top: 50px;
-  }
-
-  nav.navbar .navbar-brand{
-  	-webkit-transition: all 0.3s;
-  	-moz-transition: all 0.3s;
-  	-ms-transition: all 0.3s;
-  	-o-transition: all 0.3s;
-  	transition: all 0.3s;
-  }
-  
-  nav.navbar.shrink {
-    min-height: 50px;
-  }
-  
-  nav.navbar .navbar-brand,
-  nav.navbar.shrink .navbar-brand {
-    width: 160px;
-  }
-  
-  nav.navbar .navbar-brand {
-    padding: 15px;
-    height: 150px;
-  }
-  
-  nav.navbar.shrink .navbar-brand {
-    padding: 5px;
-    height: 50px;
-  }
-  
-  nav.navbar.shrink .navbar-brand .logo {
-    background-image: url('../img/logo_small.png');
-    height: 40px;
-    width: 40px;
-    margin-left: 50px;
-  }
-  nav.navbar.shrink .navbar-brand .logo:hover {
-    background-image: url('../img/logo_small_couleur.png');
-  }
-  nav.navbar .logo {
-    background-image: url('../img/logo_large.png');
-    height: 120px;
-    width: 120px;
-    background-repeat: no-repeat;
-    background-size: 100%;
-  }
-  nav.navbar .logo:hover {
-    background-image: url('../img/logo_large_couleur.png');
-  }
-  
-  main {
-    margin-top: 150px;
-  }
+	nav.navbar.shrink .navbar-nav {
+		margin-top: 0;
+	}
+	nav.navbar .navbar-nav {
+		margin-top: 50px;
+	}
+	nav.navbar .navbar-brand {
+		-webkit-transition: all 0.3s;
+		-moz-transition: all 0.3s;
+		-ms-transition: all 0.3s;
+		-o-transition: all 0.3s;
+		transition: all 0.3s;
+	}
+	nav.navbar.shrink {
+		min-height: 50px;
+	}
+	nav.navbar .navbar-brand, nav.navbar.shrink .navbar-brand {
+		width: 160px;
+	}
+	nav.navbar .navbar-brand {
+		padding: 15px;
+		height: 150px;
+	}
+	nav.navbar.shrink .navbar-brand {
+		padding: 5px;
+		height: 50px;
+	}
+	nav.navbar.shrink .navbar-brand .logo {
+		background-image: url('../img/logo_small.png');
+		height: 40px;
+		width: 40px;
+		margin-left: 50px;
+	}
+	nav.navbar.shrink .navbar-brand .logo:hover {
+		background-image: url('../img/logo_small_couleur.png');
+	}
+	nav.navbar .logo {
+		background-image: url('../img/logo_large.png');
+		height: 120px;
+		width: 120px;
+		background-repeat: no-repeat;
+		background-size: 100%;
+	}
+	nav.navbar .logo:hover {
+		background-image: url('../img/logo_large_couleur.png');
+	}
+	main {
+		margin-top: 150px;
+	}
 }
 
 .image-ghost {
-  float: left;
-  margin-right: 10px;
+	float: left;
+	margin-right: 10px;
 }
 
-.ng-valid[required], .ng-valid.required  {
-  border-left: 5px solid #42A948; /* green */
+.ng-valid[required], .ng-valid.required {
+	border-left: 5px solid #42A948; /* green */
 }
 
-.ng-invalid:not(form)  {
-  border-left: 5px solid #a94442; /* red */
+.ng-invalid:not(form) {
+	border-left: 5px solid #a94442; /* red */
 }
 
 .chargement-ecran, .chargement-mask {
-  height: 100%;
-  width: 100%;
-  padding: 40px;
-  text-align: center;
+	height: 100%;
+	width: 100%;
+	padding: 40px;
+	text-align: center;
 }
 
 .chargement-mask {
-  position: absolute;
-  z-index: 1000;
-  background-color: #eee;
-  opacity: 0.6;
+	position: absolute;
+	z-index: 1000;
+	background-color: #eee;
+	opacity: 0.6;
 }
 
 .chargement-mask svg {
-  position: fixed;
+	position: fixed;
 }
 
 .compte-cree-le {
-  text-align: right;
-  font-style: italic;
+	text-align: right;
+	font-style: italic;
 }
 
 .md-full-width {
-  width: 100% !important;
+	width: 100% !important;
 }
 
 /*.table-tournois td {
   cursor: pointer;
 }*/
-
 .table-tournois td a {
-  color: inherit;
+	color: inherit;
 }
